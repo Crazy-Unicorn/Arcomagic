@@ -1,13 +1,270 @@
+/*
+function xy_res (horizontal, res) {
+    if (horizontal) {
+        return {"x":res["x"], "y":res["y"]}}
+    else {
+        return {"x":res["y"], "y":res["x"]}}
+    
+}*/
+
+function xy_res (res) {
+    if (horizontal) {
+        return {"x":res["x"], "y":res["y"]}}
+    else {
+        return {"x":res["y"], "y":res["x"]}}
+    
+}
+
+function xy (x, y) {
+    if (horizontal) {
+        return {"x":x, "y":y}}
+    else {
+        return {"x":y, "y":x}}
+    
+}
+
+function relSizeX () {
+    if (horizontal) {return sizeX;}
+    else {return sizeY;}
+}
+
+function relSizeY () {
+    if (horizontal) {return sizeY;}
+    else {return sizeX;}
+}
+
+/*function xy_x (horizontal, x, y) {
+    if (horizontal) { return x; }
+    else { return y; }
+    
+}
+
+function xy_y (horizontal, x, y) {
+    if (horizontal) { return y; }
+    else { return x; }
+    
+}*/
+
+function drawCanvas () {
+
+    drawBackground();
+    drawElements();
+    onScreen();
+}
 
 
-var sizeX = 1280;
-var sizeY = 720;
+function onScreen () {
+    var bc = bctx.getImageData(0, 0, buffer.width, buffer.height);
+    ctx.putImageData(bc, 000, 000);
+}
+
+function drawBackground() {
+    background.draw();
+}
+
+function drawElements () {
+    for (var el in elements) {
+        if (elements[el].type == "image") {
+            bctx.drawImage(elements[el].image, xy(elements[el].x, elements[el].y).x, xy(elements[el].x, elements[el].y).y);
+        } else if (elements[el].type == "text") {
+            bctx.beginPath();
+            bctx.font = elements[el].font;
+            bctx.textAlign = elements[el].textAlign;
+            bctx.fillStyle = elements[el].fillStyle;
+            bctx.fillText(elements[el].text, xy(elements[el].x, elements[el].y).x, xy(elements[el].x, elements[el].y).y);
+            bctx.closePath();  
+        } else if (elements[el].type == "object") {
+            elements[el].draw();
+        }
+        /*if (elements[el].event)
+            events.push(elements[el].event);*/
+    }
+}
 
 
-var canvas_;
-var context;
+function init_resources () {
 
-var canvasOffset;
+    resource = new Array();
+    
+    resource["vsAI"] = {
+        "image" : null,
+        "src" : "res/vsAI.PNG",
+        "x" : 900,
+        "y" : 150,
+        "state" : 0
+    };
+    resource["vsAIOver"] = {
+        "image" : null,
+        "src" : "res/vsAI_over.PNG",
+        "x" : 900,
+        "y" : 150
+    };
+    resource["vsHuman"] = {
+        "image" : null,
+        "src" : "res/vsHuman.PNG",
+        "x" : 900,
+        "y" : 300,
+        "state" : 0
+    };
+    resource["vsHumanOver"] = {
+        "image" : null,
+        "src" : "res/vsHuman_over.PNG",
+        "x" : 900,
+        "y" : 300
+    };
+    resource["tbomm_title"] = {
+        "image" : null,
+        "src" : "res/tbomm_title.png"
+    };
+    
+    //var count = getResourcesCount();
+
+    //drawStartStripe(0, count);
+    
+    for (var key in resource) {
+        resource[key].image = new Image();
+        resource[key].image.src = resource[key].src;
+        lctx.drawImage(resource[key].image, 0, 0);
+    }
+}
+
+function getResourcesCount () {
+    var i = 0;
+    for (var key in resource)
+        i++;
+    return i;
+}
+
+
+
+function startGame() {
+
+    //alert("width = "+getClientWidth() +" & height = "+getClientHeight() );
+
+    horizontal = true;
+
+    sizeX = 1280;
+    sizeY = 720;
+
+    canvas = document.getElementById("game");
+    canvas.width = relSizeX();
+    canvas.height = relSizeY();
+
+    if (canvas.getContext) {
+        ctx = canvas.getContext("2d");
+
+        canvasOffset = getOffset(canvas);
+
+        buffer = document.createElement('canvas');
+        buffer.width = canvas.width;
+        buffer.height = canvas.height;
+
+        bctx = buffer.getContext("2d");
+
+        loader = document.createElement('canvas');
+        lctx = loader.getContext("2d");
+
+        init_resources();
+
+/*        canvas.addEventListener('mouseleave', mouseleaveRun, false);
+        canvas.addEventListener('mouseenter', mouseenterRun, false);
+        canvas.addEventListener('mouseout', mouseoutRun, false);
+        canvas.addEventListener('mouseover', mouseoverRun, false);
+        canvas.addEventListener('mousedown', mousedownRun, false);
+        canvas.addEventListener('mouseup', mouseupRun, false);
+        canvas.addEventListener('mousemove', mousemoveRun, false);
+        canvas.addEventListener('click', clickRun, false);*/
+        
+        init_events();
+
+        //mainMenu();
+
+        /*canvas.onmousemove = menuMousemove;
+        canvas.onclick = menuClick;*/
+
+        background = new Object();
+        elements = [];
+        startPage();
+        
+    }
+}
+
+function init_events () {
+        
+        events = [];
+        
+        canvas.addEventListener('mouseleave', mouseHandler, false);
+        canvas.addEventListener('mouseenter', mouseHandler, false);
+        canvas.addEventListener('mouseout', mouseHandler, false);
+        canvas.addEventListener('mouseover', mouseHandler, false);
+        canvas.addEventListener('mousedown', mouseHandler, false);
+        canvas.addEventListener('mouseup', mouseHandler, false);
+        canvas.addEventListener('mousemove', mouseHandler, false);
+        canvas.addEventListener('click', mouseHandler, false);
+        
+        canvas.addEventListener("touchstart", touchHandler, true);
+        canvas.addEventListener("touchmove", touchHandler, true);
+        canvas.addEventListener("touchend", touchHandler, true);
+        canvas.addEventListener("touchcancel", touchHandler, true); 
+}
+
+function mouseHandler (event) {
+    
+    alert("mouse "+event.type);
+    var len = events.length;
+
+    processed = false;
+    for (var i = len-1; i>=0; i--) {
+        if (events[i].type === event.type) {
+            events[i].process(event);
+        }
+        if (processed === true) {
+            return;
+        }
+    }
+}
+
+function touchHandler(event) {
+    
+    alert("touch "+event.type);
+    
+    var touches = event.changedTouches,
+        first = touches[0],
+        type = "";
+
+    switch(event.type)  {
+        case "touchstart":type = "mousedown";break;
+        case "touchmove":type="mousemove";break;        
+        case "touchend":type="mouseup";break;
+        default:return;
+    }
+
+             //initMouseEvent(type, canBubble, cancelable, view, clickCount,
+    //           screenX, screenY, clientX, clientY, ctrlKey,
+    //           altKey, shiftKey, metaKey, button, relatedTarget);
+    
+    var simulatedEvent = document.createEvent("MouseEvent");
+    simulatedEvent.initMouseEvent(type, true, true, window, 1,
+                              first.screenX, first.screenY,
+                              first.clientX, first.clientY, false,
+                              false, false, false, 0/*left*/, null);
+
+    first.target.dispatchEvent(simulatedEvent);
+    event.preventDefault();
+}
+
+function addElement (el) {
+
+    elements.push(el);
+    
+    if (el.events) {
+        events = events.concat(el.events);
+    }
+    
+}
+
+
+/*
 
 var item1Text = "Начать игру";
 
@@ -20,21 +277,16 @@ var itemAlign = "center";
 var itemWidth = 300;
 var itemHeight = 50;
 
-var buffer;
-var bctx;
-
-var loader;
-var lctx;
-
 var shadowLevel = 0;
 var shadowMaxLevel = 100;
 var shadowMinLevel = 0;
 var shadowingTimerId;
-var shadowing = 0;
-
-var resource ;//= [];
+var isShadowing = 0;
 
 function startGame() {
+
+//    on_body_load();
+
 
     var canvas = document.getElementById("game");
     canvas.width = sizeX;
@@ -62,8 +314,8 @@ function startGame() {
         
         //mainMenu();
 
-        /*canvas.onmousemove = menuMousemove;
-        canvas.onclick = menuClick;*/
+        / *canvas.onmousemove = menuMousemove;
+        canvas.onclick = menuClick;* /
         
     }
 }
@@ -117,11 +369,10 @@ function init_resources () {
     };
     resource["tbomm_title"] = {
         "image" : null,
-        "src" : "res/tbomm_title.png",
+        "src" : "res/tbomm_title.png",//"res/gif.gif",//"res/tbomm_title.png",
         "loaded" : 0
     };
     
-
     resLoadLevel = 0;
     
     var count = getResourcesCount();
@@ -221,7 +472,7 @@ function drawMainMenu () {
 function drawBackground () {
     
     
-    /*var back = new Image();
+    / *var back = new Image();
 
     back.src = "menu_texture7.png";
     //back.onload = function() {
@@ -231,7 +482,7 @@ function drawBackground () {
             for (i=0; i<cx; i++)
                 for (j=0; j<cy; j++)
             bctx.drawImage(back, i*back.width, j*back.height);
-       // }*/
+       // }* /
     
     bctx.fillStyle = "#acb78e"; 
     bctx.rect(0, 0, sizeX, sizeY);
@@ -245,10 +496,6 @@ function drawMainTitle (i) {
 
 }
 
-function onScreen () {
-    bc = bctx.getImageData(0, 0, buffer.width, buffer.height);
-    context.putImageData(bc, 000, 000);
-}
 
 
 function drawMenuItems() {
@@ -329,9 +576,9 @@ function goToSecondMenu() {
     
     shadowing("forward", "second");
     
-    /*bctx.fillStyle = "black"; 
+    / *bctx.fillStyle = "black"; 
     bctx.rect(0, 0, sizeX, sizeY);
-    bctx.fill();###############*/
+    bctx.fill();###############* /
     
     //drawSecondTitle();
     //shadowing(false);
@@ -344,16 +591,16 @@ function shadowing (direction, page) {
     
     cd = context.getImageData(0, 0, canvas_.width, canvas_.height);
     bctx.putImageData(cd, 0, 0);
-    shadowing = 1;
+    isShadowing = 1;
     if (direction == "forward")
         shadowLevel = shadowMinLevel;
     if (direction == "backward")
         shadowLevel = shadowMaxLevel;
-    shadowingTimerId = setInterval(function() { doShadowing(direction, page) }, 50);
+    shadowingTimerId = setInterval(function() {doShadowing(direction, page)}, 50);
 }
 
 function doShadowing (direction, page) {
-
+    //'use strict';
     if (direction=="forward") {
         if (shadowLevel<=shadowMaxLevel) {
             var contex = bctx.getImageData(0, 0, sizeX, sizeY);
@@ -371,7 +618,9 @@ function doShadowing (direction, page) {
            
         } else {
             clearInterval(shadowingTimerId);
-            shadowing = 0;
+            isShadowing = 0;
+            drawSecondTitle ();
+            shadowingTimerId = setInterval(function() {doShadowing("backward", page)}, 50);
         }
     }
     
@@ -391,10 +640,9 @@ function doShadowing (direction, page) {
             }
             context.putImageData(contex, 0, 0);
             shadowLevel-=5;
-            
         } else {
             clearInterval(shadowingTimerId);
-            shadowing = 0;
+            isShadowing = 0;
         }
     }
 }
@@ -404,13 +652,19 @@ function drawSecondTitle () {
     var img = new Image();
     img.src = "res/mdn-logo-sm.png";
     //title.onload = function() {
-       
+            bctx.fillStyle = "black"; 
+        bctx.rect(0, 0, sizeX, sizeY);
+        bctx.fill();
         bctx.drawImage(img, 300, 200);
-      
+        bctx.drawImage(img, 550, 250);
+        bctx.drawImage(img, 870, 120);
+        bctx.drawImage(img, 220, 370);
+      //bctx.drawImage(resource["tbomm_title"].image, resource["tbomm_title"].x, resource["tbomm_title"].y);
     //}
+    //onScreen();
 }
 
-/*
+/ *
 function menuMousemove (evt) {
     
     if (evt.clientX>=850&&evt.clientX<=(850+itemWidth)&&evt.clientY>=(sizeY/2-200)&&evt.clientY<=(sizeY/2-200+itemHeight)) {
@@ -520,8 +774,8 @@ function whatControlBox1(evt) {
 function whatControlBox2(evt) {
     window.removeEventListener('mousemove', whatControlBox, true);
 }
+* /
 */
-
 
 /* copied */
 
@@ -576,3 +830,51 @@ function getOffset(elem) {
         return getOffsetSum(elem)
     }
 }
+
+function getClientWidth()
+{
+  return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientWidth:document.body.clientWidth;
+}
+function getClientHeight()
+{
+  return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientHeight:document.body.clientHeight;
+}
+
+
+/*
+var img_obj = {
+    'source': null,
+    'current': 0,
+    'total_frames': 8,//16,
+    'width': 50,//16,
+    'height': 38//16
+};
+
+var img = new Image();
+img.onload = function () { // Triggered when image has finished loading.
+    img_obj.source = img;  // we set the image source for our object.
+}
+img.src = 'res/gif.gif';//'img/filename.png'; // contains an image of size 256x16
+                              // with 16 frames of size 16x16
+
+function draw_anim(context, x, y, iobj) { // context is the canvas 2d context.
+    if (iobj.source != null)
+        context.drawImage(iobj.source, iobj.current * iobj.width, 0,
+                          iobj.width, iobj.height,
+                          x, y, iobj.width, iobj.height);
+    iobj.current = (iobj.current + 1) % iobj.total_frames;
+                   // incrementing the current frame and assuring animation loop
+}
+
+function on_body_load() { // <body onload='on_body_load()'>...
+    var canvas = document.getElementById('canvasElement');
+                 // <canvas id='canvasElement' width='320' height='200'/>
+    var context = canvas.getContext("2d");
+
+    setInterval((function (c, i) {
+                return function () {
+                    draw_anim(c, 10, 10, i);
+                };
+    })(context, img_obj), 100);
+}
+*/
