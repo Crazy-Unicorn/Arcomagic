@@ -14,6 +14,8 @@
         <!--[if gte IE 5]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
         <script type="text/javascript" src="init.js"></script>
         <script type="text/javascript" src="start.js"></script>
+        <script type="text/javascript" src="waiting.js"></script>
+        <script type="text/javascript" src="field.js"></script>
     </head>
     <body onload="startGame()">
         <!--<h1>Hello World!</h1>-->

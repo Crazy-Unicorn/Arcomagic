@@ -11,7 +11,7 @@ function xy_res (res) {
     if (horizontal) {
         return {"x":res["x"], "y":res["y"]}}
     else {
-        return {"x":res["y"], "y":res["x"]}}
+        return {"x":res["y"], "y":sizeX-res["x"]}}
     
 }
 
@@ -19,7 +19,7 @@ function xy (x, y) {
     if (horizontal) {
         return {"x":x, "y":y}}
     else {
-        return {"x":y, "y":x}}
+        return {"x":y, "y":sizeX-x}}
     
 }
 
@@ -143,8 +143,8 @@ function startGame() {
 
     horizontal = true;
 
-    sizeX = 1280;
-    sizeY = 720;
+    sizeX = 1280;//300;//1280;
+    sizeY = 720;//480;//720;
 
     canvas = document.getElementById("game");
     canvas.width = relSizeX();
@@ -156,8 +156,8 @@ function startGame() {
         canvasOffset = getOffset(canvas);
 
         buffer = document.createElement('canvas');
-        buffer.width = canvas.width;
-        buffer.height = canvas.height;
+        buffer.width = relSizeX();//canvas.width;
+        buffer.height = relSizeY();//canvas.height;
 
         bctx = buffer.getContext("2d");
 
@@ -184,6 +184,7 @@ function startGame() {
 
         background = new Object();
         elements = [];
+        
         startPage();
         
     }
@@ -210,7 +211,7 @@ function init_events () {
 
 function mouseHandler (event) {
     
-    alert("mouse "+event.type);
+    //alert("mouse "+event.type);
     var len = events.length;
 
     processed = false;
@@ -226,7 +227,7 @@ function mouseHandler (event) {
 
 function touchHandler(event) {
     
-    alert("touch "+event.type);
+    //alert("touch "+event.type);
     
     var touches = event.changedTouches,
         first = touches[0],
@@ -263,6 +264,12 @@ function addElement (el) {
     
 }
 
+function clearElements () {
+
+    elements = [];
+    events = [];
+    
+}
 
 /*
 

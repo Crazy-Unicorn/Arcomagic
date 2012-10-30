@@ -1,5 +1,7 @@
 function startPage() {
 
+    clearElements();
+
     background.draw = function () {
         bctx.beginPath();
         bctx.fillStyle = "black"; 
@@ -35,15 +37,19 @@ function startPage() {
         var y_from = relSizeY()/2-100;
         var y_to = y_from + 200;        
         if (cX>=x_from && cX<=x_to && cY>=y_from && cY<=y_to) {
-            var rx = Math.floor((Math.random()*1000)+1); 
+            //alert("yellow_draw1");
+            /*var rx = Math.floor((Math.random()*1000)+1); 
             var ry = Math.floor((Math.random()*600)+1); 
             bctx.beginPath();
             bctx.fillStyle = "yellow"; 
             bctx.rect(rx, ry, 50, 50);
             bctx.fill();
             bctx.closePath();
-            onScreen();
+            onScreen();*/
+            
             processed = true;
+            waitingPage();
+            //alert("yellow_draw2");
         }
     }
 
@@ -57,12 +63,13 @@ function startPage() {
 
     element2.draw = function () {
         var img = resource["tbomm_title"].image;
-        bctx.drawImage(img, relSizeX()/2-img.width/2, 30);
+        var co = xy(sizeX/2-img.width/2, 30);
+        bctx.drawImage(img, co.x, co.y);
     }
     
     addElement(element2);
     //elements.push(element2);
-
+    
     drawCanvas();
     
 }
