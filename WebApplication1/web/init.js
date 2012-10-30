@@ -63,6 +63,7 @@ function drawBackground() {
 }
 
 function drawElements () {
+    bctx.beginPath();
     for (var el in elements) {
         if (elements[el].type == "image") {
             bctx.drawImage(elements[el].image, xy(elements[el].x, elements[el].y).x, xy(elements[el].x, elements[el].y).y);
@@ -74,11 +75,14 @@ function drawElements () {
             bctx.fillText(elements[el].text, xy(elements[el].x, elements[el].y).x, xy(elements[el].x, elements[el].y).y);
             bctx.closePath();  
         } else if (elements[el].type == "object") {
+            
             elements[el].draw();
+            
         }
         /*if (elements[el].event)
             events.push(elements[el].event);*/
     }
+    bctx.closePath();
 }
 
 
@@ -254,14 +258,38 @@ function touchHandler(event) {
     event.preventDefault();
 }
 
+function createObjectElement (draw, events) {
+
+    var el = new Object();
+    el.type = "object";
+    el.draw = draw;
+    
+
+    if (events!==null) {
+        el.events = [];
+        for (var i in events)
+            el.events.push(events[i]);
+    }
+    return el;
+    
+}
+
+function createEvent (type, process) {
+
+    var ev = new Object();
+    ev.type = type;
+    ev.process = process;
+    
+    return ev;
+    
+}
+
 function addElement (el) {
 
     elements.push(el);
-    
     if (el.events) {
         events = events.concat(el.events);
     }
-    
 }
 
 function clearElements () {

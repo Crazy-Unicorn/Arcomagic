@@ -1,7 +1,7 @@
 function waitingPage() {
 
     clearElements();
-
+/*
     var element = new Object();
     element.type = "object";
 
@@ -15,7 +15,16 @@ function waitingPage() {
         bctx.closePath();
     }
 
-    addElement(element);
+    addElement(element);*/
+    
+    addElement(createObjectElement(function () {
+        bctx.beginPath();
+        bctx.font = "80pt Garamond";
+        bctx.textAlign = "center";
+        bctx.fillStyle = "white";
+        bctx.fillText("Waiting...", relSizeX()/2, relSizeY()/2);
+        bctx.closePath();
+    }, null));
     
     drawCanvas();
     
