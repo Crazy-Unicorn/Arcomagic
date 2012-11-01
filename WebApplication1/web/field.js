@@ -42,7 +42,8 @@ function fieldPage() {
       
     }
     
-    var process = function (evt) {
+    /*var process = function (evt) {
+        //alert(1)
         var cX = evt.clientX-canvasOffset.left;
         var cY = evt.clientY-canvasOffset.top;
         var x_from = this.el.x;
@@ -55,7 +56,7 @@ function fieldPage() {
             drawCanvas();
             processed = true;
         }
-    }
+    }*/
     
     var cardMouseDown = function (evt) {
         var cX = evt.clientX-canvasOffset.left;
@@ -75,7 +76,9 @@ function fieldPage() {
     }
 
     var cardMouseUp = function (evt) {
+        //alert('1')
         if (tracker.id===this.el.id) {
+            
             tracker.id = null;
             processed = true;
         }
@@ -102,16 +105,52 @@ function fieldPage() {
                 if ((this.el.y-(tracker.y-cY)) >= 0) {
                     this.el.y -= (tracker.y-cY);
                     tracker.y = cY;
+                    drawCanvas(); 
                 } else {
                     this.el.y = 0;
+                    drawCanvas(); 
                 }
                 if (this.el.y <= (this.el.initY-this.el.height-10)) {
                     this.el.y = this.el.initY-this.el.height-10;
                     //alert("вынул");
-                    drawCanvas();
+                    //drawCanvas();
+                    drawCanvas(); 
+                    this.el.events["mouseup"].process(evt);
+                    
+                    bctx.beginPath();
+                    bctx.font = "60pt Garamond";
+                    bctx.textAlign = "center";
+                    bctx.fillStyle = "red";
+                    bctx.fillText("Выбрал", relSizeX()/2, relSizeY()/3);
+                    bctx.closePath();
+                    
+                    onScreen();
+                    var el = this.el;
+                    setTimeout(function() {el.restore(); drawCanvas();}, 1000);
+                    
                     //cardMouseUp(evt);
                 }   
-                drawCanvas();                
+                if (this.el.y >= (this.el.initY+this.el.height*0.3)) {
+                    this.el.y = this.el.initY+this.el.height*0.3;
+                    //alert("скинул");
+                    drawCanvas();
+                    
+                    this.el.events["mouseup"].process(evt);
+                    
+                    bctx.beginPath();
+                    bctx.font = "60pt Garamond";
+                    bctx.textAlign = "center";
+                    bctx.fillStyle = "red";
+                    bctx.fillText("Скинул", relSizeX()/2, relSizeY()/3);
+                    bctx.closePath();
+                    
+                    onScreen();
+                    var el = this.el;
+                    setTimeout(function() {el.restore(); drawCanvas();}, 1000);
+                    
+                    //cardMouseUp(evt);
+                }   
+                //drawCanvas();        
             } else {
                 this.el.y = sizeY - this.el.height;
                 drawCanvas();

@@ -57,8 +57,8 @@ function startPage() {
 
     addElement(element);*/
     
-    var evs = [];
-    evs.push(createEvent("mousedown", function (evt) {
+    var evs = new Object();
+    evs["mousedown"]=createEvent("mousedown", function (evt) {
         var cX = evt.clientX-canvasOffset.left;
         var cY = evt.clientY-canvasOffset.top;
         var x_from = relSizeX()/2-200;
@@ -69,7 +69,7 @@ function startPage() {
             processed = true;
             waitingPage();
         }
-    }));
+    });
     
     addElement(createObjectElement(function () {
         bctx.beginPath();

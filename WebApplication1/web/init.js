@@ -188,7 +188,7 @@ function startGame() {
 
 function init_events () {
         
-        events = [];
+        events = new Object();// = [];
         
         canvas.addEventListener('mouseleave', mouseHandler, false);
         canvas.addEventListener('mouseenter', mouseHandler, false);
@@ -223,8 +223,8 @@ function mouseHandler (event) {
     var elLen = elements.length;
     for (var i = elLen-1; i>=0; i--) {
         if (elements[i].events) {
-            var evLen = elements[i].events.length;
-            for (var j = 0; j<evLen; j++) {
+            //var evLen = elements[i].events.length;
+            for (var j in elements[i].events) {
                 if (elements[i].events[j].type === event.type) {
                     elements[i].events[j].process(event);
                 }
@@ -280,14 +280,14 @@ function createObjectElement (draw, events, x, y, width, height) {
         this.y = this.initY;
     }
     if (events!==null) {
-        el.events = [];
+        el.events = new Object();
         for (var i in events)
-            el.events.push(events[i]);
+            el.events[i]=events[i];
     }
     
     el.addEvent = function (type, process) {
         if (!this.events)
-            this.events = [];
+            this.events = new Object();
         var ev = new Object();
         ev.type = type;
         ev.process = process;/*function (evt) {
@@ -306,7 +306,7 @@ function createObjectElement (draw, events, x, y, width, height) {
         }
     };*///process;
         ev.el = this;
-        this.events.push(ev);
+        this.events[type]=ev;
         return this;
     }
     
@@ -351,16 +351,16 @@ function addEvent (type, process, element) {
 function addElement (el) {
 
     elements.push(el);
-    if (el.events) {
+    /*if (el.events) {
         events = events.concat(el.events);
-    }
+    }*/
 
 }
 
 function clearElements () {
 
     elements = [];
-    events = [];
+    //events = [];
     
     lastId = null;
     
