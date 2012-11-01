@@ -1,21 +1,6 @@
 function waitingPage() {
 
     clearElements();
-/*
-    var element = new Object();
-    element.type = "object";
-
-    element.draw = function () {
-        //background.draw();
-        bctx.beginPath();
-        bctx.font = "80pt Garamond";
-        bctx.textAlign = "center";
-        bctx.fillStyle = "white";
-        bctx.fillText("Waiting...", relSizeX()/2, relSizeY()/2);
-        bctx.closePath();
-    }
-
-    addElement(element);*/
     
     addElement(createObjectElement(function () {
         bctx.beginPath();
@@ -25,7 +10,7 @@ function waitingPage() {
         bctx.fillText("Waiting...", relSizeX()/2, relSizeY()/2);
         bctx.closePath();
     }, null));
-    
+
     drawCanvas();
     
     iter = 0;
@@ -57,7 +42,7 @@ function waitingPage() {
         }        
         addElement(element);
         drawCanvas();
-        if (iter===5) {
+        if (iter===1) {
             clearInterval(timer);
             fieldPage();
         }

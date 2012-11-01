@@ -74,14 +74,14 @@ function startPage() {
     addElement(createObjectElement(function () {
         bctx.beginPath();
         bctx.fillStyle = "#464451"; 
-        bctx.rect(relSizeX()/2-200, relSizeY()/2-100, 400, 200);
+        bctx.rect(relSizeX()/2-200, relSizeY()/2-100, this.width, this.height);
         bctx.fill();
         bctx.font = "80pt Calibri";
         bctx.textAlign = "center";
         bctx.fillStyle = "red";
         bctx.fillText("START!", relSizeX()/2, relSizeY()/2);
         bctx.closePath();
-    }, evs));
+    }, evs, 0,0,400,200));
     
     //elements.push(element);
 
@@ -99,7 +99,10 @@ function startPage() {
     addElement(createObjectElement(function () {
         var img = resource["tbomm_title"].image;
         var co = xy(sizeX/2-img.width/2, 30);
+        //alert(resource["tbomm_title"].image+" "+co.x+" "+co.y+" "+img.width);
         bctx.drawImage(img, co.x, co.y);
+        if (img.width===0)
+             bctx.drawImage(resource["tbomm_title"].image, co.x, co.y);  
     }, null));
     //elements.push(element2);
     

@@ -126,9 +126,14 @@ function init_resources () {
     //drawStartStripe(0, count);
     
     for (var key in resource) {
+        /*hiddenImg= new Image();
+        hiddenImg.src= resource[key].src;
+        resource[key].image = hiddenImg;*/
         resource[key].image = new Image();
         resource[key].image.src = resource[key].src;
         lctx.drawImage(resource[key].image, 0, 0);
+        //alert(resource[key].image.width);
+        //alert(resource[key].image.width);
     }
 }
 
@@ -160,8 +165,8 @@ function startGame() {
         canvasOffset = getOffset(canvas);
 
         buffer = document.createElement('canvas');
-        buffer.width = relSizeX();//canvas.width;
-        buffer.height = relSizeY();//canvas.height;
+        buffer.width = relSizeX();
+        buffer.height = relSizeY();
 
         bctx = buffer.getContext("2d");
 
@@ -169,28 +174,15 @@ function startGame() {
         lctx = loader.getContext("2d");
 
         init_resources();
-
-/*        canvas.addEventListener('mouseleave', mouseleaveRun, false);
-        canvas.addEventListener('mouseenter', mouseenterRun, false);
-        canvas.addEventListener('mouseout', mouseoutRun, false);
-        canvas.addEventListener('mouseover', mouseoverRun, false);
-        canvas.addEventListener('mousedown', mousedownRun, false);
-        canvas.addEventListener('mouseup', mouseupRun, false);
-        canvas.addEventListener('mousemove', mousemoveRun, false);
-        canvas.addEventListener('click', clickRun, false);*/
         
         init_events();
 
-        //mainMenu();
-
-        /*canvas.onmousemove = menuMousemove;
-        canvas.onclick = menuClick;*/
+        /*canvas.onclick = menuClick;*/
 
         background = new Object();
         elements = [];
         
         startPage();
-        
     }
 }
 
@@ -216,7 +208,7 @@ function init_events () {
 function mouseHandler (event) {
     
     //alert("mouse "+event.type);
-    var len = events.length;
+    /*var len = events.length;
 
     processed = false;
     for (var i = len-1; i>=0; i--) {
@@ -225,6 +217,21 @@ function mouseHandler (event) {
         }
         if (processed === true) {
             return;
+        }
+    }*/
+    processed = false;
+    var elLen = elements.length;
+    for (var i = elLen-1; i>=0; i--) {
+        if (elements[i].events) {
+            var evLen = elements[i].events.length;
+            for (var j = 0; j<evLen; j++) {
+                if (elements[i].events[j].type === event.type) {
+                    elements[i].events[j].process(event);
+                }
+                if (processed === true) {
+                    return;
+                }                 
+            }
         }
     }
 }
@@ -258,18 +265,57 @@ function touchHandler(event) {
     event.preventDefault();
 }
 
-function createObjectElement (draw, events) {
+function createObjectElement (draw, events, x, y, width, height) {
 
     var el = new Object();
     el.type = "object";
+    el.x = el.initX = x;
+    el.y = el.initY = y;
+    el.width = width;
+    el.height = height;
     el.draw = draw;
     
-
+    el.restore = function() {
+        this.x = this.initX;
+        this.y = this.initY;
+    }
     if (events!==null) {
         el.events = [];
         for (var i in events)
             el.events.push(events[i]);
     }
+    
+    el.addEvent = function (type, process) {
+        if (!this.events)
+            this.events = [];
+        var ev = new Object();
+        ev.type = type;
+        ev.process = process;/*function (evt) {
+        //alert("#");
+        var cX = evt.clientX-canvasOffset.left;
+        var cY = evt.clientY-canvasOffset.top;
+        var x_from = el.x;
+        var x_to = el.x+el.width;
+        var y_from = el.y;
+        var y_to = el.y+el.height;   
+        
+        if (cX>=x_from && cX<=x_to && cY>=y_from && cY<=y_to) {
+            alert(this.type);
+            el.y-=10;
+            drawCanvas();
+        }
+    };*///process;
+        ev.el = this;
+        this.events.push(ev);
+        return this;
+    }
+    
+    
+    if (lastId === null)
+        lastId = 1;
+    else
+        lastId++;
+    el.id = lastId;
     return el;
     
 }
@@ -284,18 +330,39 @@ function createEvent (type, process) {
     
 }
 
+var tracker = {
+    id: null,
+    x: 0,
+    y: 0
+}
+
+/*
+function addEvent (type, process, element) {
+    if (!element.events)
+        element.events = [];
+    var ev = new Object();
+    ev.type = type;
+    ev.process = process;
+    ev.el = element;
+    element.events.push(ev);
+    return element;
+}
+*/
 function addElement (el) {
 
     elements.push(el);
     if (el.events) {
         events = events.concat(el.events);
     }
+
 }
 
 function clearElements () {
 
     elements = [];
     events = [];
+    
+    lastId = null;
     
 }
 
