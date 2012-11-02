@@ -4,6 +4,12 @@ function waitingPage() {
     
     addElement(createObjectElement(function () {
         bctx.beginPath();
+        bctx.fillStyle = "black"; 
+        bctx.rect(0, 0, relSizeX(), relSizeY());
+        bctx.fill();
+        bctx.closePath();
+        
+        bctx.beginPath();
         bctx.font = "80pt Garamond";
         bctx.textAlign = "center";
         bctx.fillStyle = "white";

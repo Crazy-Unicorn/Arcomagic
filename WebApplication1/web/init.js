@@ -120,6 +120,10 @@ function init_resources () {
         "image" : null,
         "src" : "res/tbomm_title.png"
     };
+    resource["red_card_back"] = {
+        "image" : null,
+        "src" : "res/red.png"
+    };
     
     //var count = getResourcesCount();
 
@@ -182,7 +186,20 @@ function startGame() {
         background = new Object();
         elements = [];
         
-        startPage();
+        //startPage();
+        bctx.beginPath();
+        bctx.fillStyle = "black"; 
+        bctx.rect(0, 0, relSizeX(), relSizeY());
+        bctx.fill();
+        bctx.font = "40pt Calibri";
+        bctx.textAlign = "center";
+        bctx.fillStyle = "#222222";
+        bctx.fillText("Loading...", relSizeX()/2, relSizeY()/2);
+        bctx.closePath();
+        
+        onScreen();
+        
+        setTimeout(startPage, 200); //135!!!
     }
 }
 
@@ -274,11 +291,16 @@ function createObjectElement (draw, events, x, y, width, height) {
     el.width = width;
     el.height = height;
     el.draw = draw;
+    el.oldDraw = draw;
+    el.waiting = false;
     
     el.restore = function() {
         this.x = this.initX;
         this.y = this.initY;
     }
+    el.restoreDraw = function() {
+        this.draw = this.oldDraw;
+    }    
     if (events!==null) {
         el.events = new Object();
         for (var i in events)
@@ -364,6 +386,15 @@ function clearElements () {
     
     lastId = null;
     
+}
+
+
+function drawBox(x,y,width,height,color) {
+        bctx.beginPath();
+        bctx.fillStyle = color; 
+        bctx.rect(x, y, width, height);
+        bctx.fill();
+        bctx.closePath();
 }
 
 /*
