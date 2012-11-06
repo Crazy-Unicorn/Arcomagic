@@ -3,77 +3,18 @@ function fieldPage() {
     clearElements();
 
     background.draw = function () {
-        /*
-        bctx.beginPath();
-        bctx.fillStyle = "green"; 
-        bctx.rect(0, 0, relSizeX(), relSizeY());
-        bctx.fill();
-        bctx.closePath();*/
         drawBox(0,0,relSizeX(),relSizeY(),"green");
-        
-        /*bctx.beginPath();
-        bctx.fillStyle = "brown"; 
-        bctx.rect(relSizeX()/2-500, relSizeY()/2+75, 150, 200);
-        bctx.fill();
-        bctx.closePath();  */
         drawBox(relSizeX()/2-500, relSizeY()/2+75, 150, 200,"brown");
-        
-        /*bctx.beginPath();
-        bctx.fillStyle = "brown"; 
-        bctx.rect(relSizeX()/2-330, relSizeY()/2+75, 150, 200);
-        bctx.fill();
-        bctx.closePath();*/
         drawBox(relSizeX()/2-330, relSizeY()/2+75, 150, 200,"brown");
-        
-        /*bctx.beginPath();
-        bctx.fillStyle = "brown"; 
-        bctx.rect(relSizeX()/2-160, relSizeY()/2+75, 150, 200);
-        bctx.fill();
-        bctx.closePath();*/
         drawBox(relSizeX()/2-160, relSizeY()/2+75, 150, 200,"brown");
-        
-        
-        /*bctx.beginPath();
-        bctx.fillStyle = "brown"; 
-        bctx.rect(relSizeX()/2+10, relSizeY()/2+75, 150, 200);
-        bctx.fill();
-        bctx.closePath();*/
         drawBox(relSizeX()/2+10, relSizeY()/2+75, 150, 200,"brown");
-        
-        
-        /*bctx.beginPath();
-        bctx.fillStyle = "brown"; 
-        bctx.rect(relSizeX()/2+180, relSizeY()/2+75, 150, 200);
-        bctx.fill();
-        bctx.closePath();*/
         drawBox(relSizeX()/2+180, relSizeY()/2+75, 150, 200,"brown");
-        
-        
-        /*bctx.beginPath();
-        bctx.fillStyle = "brown"; 
-        bctx.rect(relSizeX()/2+350, relSizeY()/2+75, 150, 200);
-        bctx.fill();
-        bctx.closePath();*/
         drawBox(relSizeX()/2+350, relSizeY()/2+75, 150, 200,"brown");
-        
-      
+        drawResources();
+        drawTowerTop(100,100,100,50);
+        drawTowerBottom(50,400,200,50);
+        drawTowerCore(130,150,40,250);
     }
-    
-    /*var process = function (evt) {
-        //alert(1)
-        var cX = evt.clientX-canvasOffset.left;
-        var cY = evt.clientY-canvasOffset.top;
-        var x_from = this.el.x;
-        var x_to = this.el.x+this.el.width;
-        var y_from = this.el.y;
-        var y_to = this.el.y+this.el.height;   
-        //alert(this.el.x);
-        if (cX>=x_from && cX<=x_to && cY>=y_from && cY<=y_to) {
-            this.el.y-=10;
-            drawCanvas();
-            processed = true;
-        }
-    }*/
     
     var cardMouseDown = function (evt) {
         var cX = evt.clientX-canvasOffset.left;
@@ -88,21 +29,9 @@ function fieldPage() {
             tracker.id = this.el.id;
             tracker.x = cX;
             tracker.y = cY;
-            this.el.oldDraw = this.el.draw;
             this.el.draw = function () {
-                /*bctx.beginPath();
-                bctx.fillStyle = "#f2de29"; 
-                bctx.rect(this.x-5, this.y-5, this.width+10, this.height+10);
-                bctx.fill();
-                bctx.closePath();*/
                 drawBox(this.x-5, this.y-5, this.width+10, this.height+10,"#f2de29");
-                /*bctx.beginPath();
-                bctx.fillStyle = this.color;//"magenta"; 
-                bctx.rect(this.x, this.y, this.width, this.height);
-                bctx.fill();
-                bctx.closePath();*/
                 drawBox(this.x, this.y, this.width, this.height,this.color);
-                //colorCard(this.el.color, this.el);
             }
             drawCanvas();
             processed = true;
@@ -115,6 +44,7 @@ function fieldPage() {
             if (this.el.waiting===false) {
                 this.el.restore();
                 this.el.draw = this.el.oldDraw;
+                //alert(this.el.oldDraw)
             }
             drawCanvas();
             tracker.id = null;
@@ -158,19 +88,8 @@ function fieldPage() {
                     //alert("вынул");
                     //drawCanvas();
                     this.el.draw = function () {
-                        /*bctx.beginPath();
-                        bctx.fillStyle = "red"; 
-                        bctx.rect(this.x-5, this.y-5, this.width+10, this.height+10);
-                        bctx.fill();
-                        bctx.closePath();*/
                         drawBox(this.x-5, this.y-5, this.width+10, this.height+10, "red");
-                        /*bctx.beginPath();
-                        bctx.fillStyle = this.color;//"magenta"; 
-                        bctx.rect(this.x, this.y, this.width, this.height);
-                        bctx.fill();
-                        bctx.closePath();*/
                         drawBox(this.x, this.y, this.width, this.height, this.color);
-                        //colorCard(this.el.color, this.el);
                     }
             
                     drawCanvas(); 
@@ -195,17 +114,7 @@ function fieldPage() {
                     this.el.y = this.el.initY+this.el.height*0.3;
                     //alert("скинул");
                     this.el.draw = function () {
-                        /*bctx.beginPath();
-                        bctx.fillStyle = "black"; 
-                        bctx.rect(this.x-5, this.y-5, this.width+10, this.height+10);
-                        bctx.fill();
-                        bctx.closePath();*/
                         drawBox(this.x-5, this.y-5, this.width+10, this.height+10, "black");
-                        /*bctx.beginPath();
-                        bctx.fillStyle = this.color;//"magenta"; 
-                        bctx.rect(this.x, this.y, this.width, this.height);
-                        bctx.fill();
-                        bctx.closePath();*/
                         drawBox(this.x, this.y, this.width, this.height, this.color);
                         //colorCard(this.el.color, this.el);
                     }
@@ -228,29 +137,13 @@ function fieldPage() {
                     
                     //cardMouseUp(evt);
                 }   
-                //drawCanvas();        
-           /* } else {
-                //alert('here');
-                this.el.y = sizeY - this.el.height;
-                drawCanvas();
-                alert('here');
-            }*/
             processed = true;
         }
     }
-    
-    /*var ev = createEvent("mousedown", process);
-    var els = [];
-    els.push(ev);*/
-    
+   
     
     function colorCard (color, card) {
         drawBox(card.x, card.y, card.width, card.height, color);
-        /*bctx.beginPath();
-        bctx.fillStyle = color; 
-        bctx.rect(card.x, card.y, card.width, card.height);
-        bctx.fill();
-        bctx.closePath();*/
         card.color = color;
     }
     
@@ -260,43 +153,7 @@ function fieldPage() {
     .addEvent("mousemove", cardMouseMove)
     .addEvent("mouseleave", cardMouseLeave));//.addEvent("mousedown", process));
     
- /*   
-    var el1 = createObjectElement(function () {
-        bctx.beginPath();
-        bctx.fillStyle = "yellow"; 
-        bctx.rect(this.x, this.y, this.width, this.height);
-        bctx.fill();
-        bctx.closePath();
-    }, null, relSizeX()/2-500, relSizeY()/2+75, 150, 200);
-    el1.addEvent("mousedown", process);
-    addElement(el1);*/
-    
-    /*element1.events = [];
-    
-    var event = new Object();
-    event.type = "mousedown";
-    event.process = function (evt) {
-        var cX = evt.clientX-canvasOffset.left;
-        var cY = evt.clientY-canvasOffset.top;
-        var x_from = relSizeX()/2-200;
-        var x_to = x_from + 400;
-        var y_from = relSizeY()/2-100;
-        var y_to = y_from + 200;        
-        if (cX>=x_from && cX<=x_to && cY>=y_from && cY<=y_to) {
-            processed = true;
-            //waitingPage();
-            //alert("yellow_draw2");
-        }
-    }
-    element1.events.push(event);
-    addElement(element1);*/
-
     addElement(createObjectElement(function () {
-       /* bctx.beginPath();
-        bctx.fillStyle = "magenta"; 
-        bctx.rect(this.x, this.y, this.width, this.height);
-        bctx.fill();
-        bctx.closePath();*/
         colorCard("magenta", this);
     }, null, relSizeX()/2-330, relSizeY()/2+75, 150, 200)
         .addEvent("mousedown", cardMouseDown)
@@ -306,11 +163,6 @@ function fieldPage() {
    );
 
     addElement(createObjectElement(function () {
-      /* bctx.beginPath();
-        bctx.fillStyle = "cyan"; 
-        bctx.rect(this.x, this.y, this.width, this.height);
-        bctx.fill();
-        bctx.closePath();*/
         colorCard("cyan", this);
     }, null, relSizeX()/2-160, relSizeY()/2+75, 150, 200)
         .addEvent("mousedown", cardMouseDown)
@@ -320,11 +172,6 @@ function fieldPage() {
     );
 
     addElement(createObjectElement(function () {
-       /*bctx.beginPath();
-        bctx.fillStyle = "grey"; 
-        bctx.rect(this.x, this.y, this.width, this.height);
-        bctx.fill();
-        bctx.closePath();*/
         colorCard("grey", this);
     }, null, relSizeX()/2+10, relSizeY()/2+75, 150, 200)
         .addEvent("mousedown", cardMouseDown)
@@ -335,11 +182,6 @@ function fieldPage() {
 
 
     addElement(createObjectElement(function () {
-        /*bctx.beginPath();
-        bctx.fillStyle = "blue"; 
-        bctx.rect(this.x, this.y, this.width, this.height);
-        bctx.fill();
-        bctx.closePath();*/
         colorCard("blue", this);
     }, null, relSizeX()/2+180, relSizeY()/2+75, 150, 200)
         .addEvent("mousedown", cardMouseDown)
@@ -349,11 +191,6 @@ function fieldPage() {
     );
 
    addElement(createObjectElement(function () {
-        /*bctx.beginPath();
-        bctx.fillStyle = "black"; 
-        bctx.rect(this.x, this.y, this.width, this.height);
-        bctx.fill();
-        bctx.closePath();*/
        colorCard("black", this);
     }, null, relSizeX()/2+350, relSizeY()/2+75, 150, 200)
         .addEvent("mousedown", cardMouseDown)
@@ -364,47 +201,96 @@ function fieldPage() {
        
        
 
-    function player(name) {
+    function gameResource (name, production, amount) {
+       var gameResource = new Object();
+       gameResource.name = name;
+       gameResource.production = production;
+       gameResource.amount = amount;
+       var resName = name;
+       gameResource.img = resource[resName].image;
+       return gameResource;
+    }
+
+    //var res_gems = resource("gems",2,5); //mana
+    //var res_bricks = resource("bricks",2,5); //quarry
+    //var res_recruits = resource("recruits",2,5);
+    
+    function player (name) {
         var player = new Object();
         player.name = name;
-
+        player.resources = [];
         return player;
     }   
        
     //player1 = "Player 1";
     //player2 = "Player 2";
     
-    player1 = player("Player 1");
-    player2 = player("Player 2");
+    var player1 = player("Player 1");
+   
+    player1.resources["bricks"] = gameResource("bricks",2,5);
+    player1.resources["gems"] = gameResource("gems",2,5);
+    player1.resources["beasts"] = gameResource("beasts",2,5);
+    //player1.resources["recruits"] = gameResource("recruits",2,5);
     
-    currentPlayer = player2;
+    var player2 = player("Player 2");
+    
+    player2.resources["bricks"] = gameResource("bricks",2,5);
+    player2.resources["skull"] = gameResource("skull",2,5);
+    //player2.resources["gems"] = resource("gems",2,5);
+    //player2.resources["recruits"] = resource("recruits",2,5);
+    
+    var currentPlayer = player2;
+    
+    function drawResources() {
+        var i=0;
+        var height=0;
+        for (var res in player1.resources) {
+            if (player1.resources[res].img) {
+                bctx.drawImage(player1.resources[res].img, 20, 70+height);
+                height+=player1.resources[res].img.height;
+                i++;
+            }
+        }
+        i=0;
+        height=0;
+        for (var res in player2.resources) {
+            if (player2.resources[res].img) {
+                if (res != 'skull') {
+                    bctx.drawImage(player2.resources[res].img, relSizeX()-20-player2.resources[res].img.width, 70+height);
+                    height+=player2.resources[res].img.height;
+                    i++;
+                } else {
+                    drawBox(relSizeX()-20-120, 70+height, 120, 100, "#c0c0c0");
+                    bctx.drawImage(player2.resources[res].img, relSizeX()-20-60-player2.resources[res].img.width/2, 70+height+50-player2.resources[res].img.height/2);
+                    height+=100;
+                    i++;
+                }
+                    
+            }
+        }
+    }
+    
+    function card (name, type, img, requirements, addndis, damage/*damage4Enemy, damage4Me*/, description) { //damage4ResourceDwellings /*объект*/, damage4Resources /*объект*/,) {
+        var card = new Object();
+        card.name = name;
+        card.type = type;
+        card.img = resource[img].img;
+        card.requirements = requirements;
+        card.addndis = addndis;
+        card.damage = damage;
+        card.description = description;
+    }
+    
     
     addElement(createObjectElement(function () {
-        /*
-        bctx.beginPath();
-        bctx.fillStyle = "black"; 
-        bctx.rect(this.x-4, this.y-4, this.width+8, this.height+8);
-        bctx.fill();
-        bctx.closePath();
         
-        bctx.beginPath();
-        bctx.fillStyle = "white"; 
-        bctx.rect(this.x-1, this.y-1, this.width+2, this.height+2);
-        bctx.fill();
-        bctx.closePath();
-        
-        bctx.beginPath();
-        bctx.fillStyle = "black"; 
-        bctx.rect(this.x, this.y, this.width, this.height);
-        bctx.fill();
-        bctx.closePath();*/
-        var r = 4;
-        drawBox(this.x-r, this.y-r, this.width+r*2, this.height+r*2, "black");
-        
-        r = 1;
-        drawBox(this.x-r, this.y-r, this.width+r*2, this.height+r*2, "white");
-
         drawBox(this.x, this.y, this.width, this.height, "black");
+        
+        var r = 3;
+        drawBox(this.x+r, this.y+r, this.width-r*2, this.height-r*2, "white");
+
+        r = 4;
+        drawBox(this.x+r, this.y+r, this.width-r*2, this.height-r*2, "black");
         
                     bctx.beginPath();
                     bctx.font = "20pt Arial";
@@ -423,24 +309,18 @@ function fieldPage() {
                         bctx.fillStyle = "white";
                         bctx.fillText("Ходит", this.x+this.width+10+this.width/4, this.y+5+(this.height-10)/2+5);
                         bctx.closePath();
-        }
-            
-                    
+        }      
+        
     }, null, 20, 20, 200, 40)  );
         
     addElement(createObjectElement(function () {
-        /*bctx.beginPath();
-        bctx.fillStyle = "black"; 
-        bctx.rect(this.x, this.y, this.width, this.height);
-        bctx.fill();
-        bctx.closePath();*/
-        var r = 4;
-        drawBox(this.x-r, this.y-r, this.width+r*2, this.height+r*2, "black");
-        
-        r = 1;
-        drawBox(this.x-r, this.y-r, this.width+r*2, this.height+r*2, "white");
-
         drawBox(this.x, this.y, this.width, this.height, "black");
+        
+        var r = 3;
+        drawBox(this.x+r, this.y+r, this.width-r*2, this.height-r*2, "white");
+
+        r = 4;
+        drawBox(this.x+r, this.y+r, this.width-r*2, this.height-r*2, "black");
         
                     bctx.beginPath();
                     bctx.font = "20pt Arial";
@@ -459,10 +339,49 @@ function fieldPage() {
                         bctx.fillText("Ходит", this.x-this.width/2-10+this.width/4, this.y+5+(this.height-10)/2+5);
                         bctx.closePath();
         }
-
+        
+        
     }, null, relSizeX()-20-200, 20, 200, 40)  );
     
-       
+    
+    function drawTowerTop(x, y, width, height) {
+        bctx.beginPath();
+        bctx.moveTo(x, y+height); 
+        bctx.lineTo(x+width, y+height); 
+        bctx.lineTo(x+width/2, y);  
+        bctx.moveTo(x+width, y+height); 
+        bctx.lineTo(x+width/2, y);  
+        bctx.fillStyle = "rgba(255,128,128,1.0)"; 
+        bctx.fill();
+        bctx.closePath();
+    }
+    
+    function drawTowerBottom(x, y, width, height) {
+        bctx.beginPath();
+        bctx.moveTo(x, y+height); 
+        bctx.lineTo(x+width, y+height); 
+        //bctx.moveTo(x, y); 
+        bctx.lineTo(x+width*2/3, y);  
+        bctx.lineTo(x+width/3, y);  
+        bctx.lineTo(x, y+height);
+        bctx.fillStyle = "rgba(255,128,128,1.0)"; 
+        bctx.fill();
+        bctx.closePath();
+    }
+    
+    function drawTowerCore(x, y, width, height) {
+        bctx.beginPath();
+        bctx.moveTo(x, y); 
+        bctx.lineTo(x, y+height); 
+        //bctx.moveTo(x, y); 
+        bctx.lineTo(x+width, y+height);  
+        bctx.lineTo(x+width, y);  
+        bctx.lineTo(x, y);
+        bctx.fillStyle = "rgba(255,128,128,1.0)"; 
+        bctx.fill();
+        bctx.closePath();
+    }
+    
 /*
    addElement(createObjectElement(function () {
         bctx.fillStyle = "brown"; 

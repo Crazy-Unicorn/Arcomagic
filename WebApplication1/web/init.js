@@ -125,6 +125,22 @@ function init_resources () {
         "src" : "res/red.png"
     };
     
+    resource["bricks"] = {
+        "image" : null,
+        "src" : "res/bricks.PNG"
+    };
+    resource["gems"] = {
+        "image" : null,
+        "src" : "res/gems.PNG"
+    };
+    resource["beasts"] = {
+        "image" : null,
+        "src" : "res/beasts.PNG"
+    };
+    resource["skull"] = {
+        "image" : null,
+        "src" : "res/skull.PNG"
+    };
     //var count = getResourcesCount();
 
     //drawStartStripe(0, count);
@@ -199,7 +215,7 @@ function startGame() {
         
         onScreen();
         
-        setTimeout(startPage, 200); //135!!!
+        setTimeout(startPage, 300); //135!!!
     }
 }
 
@@ -973,6 +989,27 @@ function getClientHeight()
   return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientHeight:document.body.clientHeight;
 }
 
+function canvasBrowser() {
+      // Определяем тип браузера
+      var ua = navigator.userAgent.toLowerCase();
+      var isIE = (ua.indexOf("msie") != -1 && ua.indexOf("opera") == -1 && ua.indexOf("webtv") == -1);
+      var isOpera = ua.indexOf("opera") != -1;
+      var isFF = ua.indexOf("firefox") != -1;
+
+      var result = false;
+      // Разрешим все версии IE
+      if (isIE) result = true;
+      // Лису разрешим только с полторашки
+      else if (isFF) {
+            var ffVersion = parseFloat(ua.substring(ua.indexOf("firefox") + 8, ua.length));
+            if (ffVersion >= 1.5) result = true;
+      // Оперу, начиная с версии 9.0
+      } else if (isOpera) {
+            var operaVersion = parseFloat(ua.substring(ua.indexOf("opera") + 6, ua.length));
+            if (operaVersion >= 9.0) result = true;
+      }
+      return result;
+}
 
 /*
 var img_obj = {

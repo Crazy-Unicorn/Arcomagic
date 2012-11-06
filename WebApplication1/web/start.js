@@ -3,27 +3,7 @@ function startPage() {
     clearElements();
 
     background.draw = function () {
-        /*bctx.beginPath();
-        
-        bctx.fillStyle = "black"; 
-        bctx.rect(0, 0, relSizeX(), relSizeY());
-        bctx.fill();
-        
-        bctx.closePath();*/
-        
         drawBox(0, 0, relSizeX(), relSizeY(), "black");
-        
-        /*bctx.beginPath();
-        
-        bctx.fillStyle = "white"; 
-        bctx.rect(100, 100, 274, 353);
-        bctx.fill();
-        
-        bctx.closePath();*/
-        /*var img = resource["red_card_back"].image;
-        var co = xy(100, 100);
-        bctx.drawImage(img, co.x, co.y);*/
-        
     }
     
     var evs = new Object();
@@ -41,12 +21,7 @@ function startPage() {
     });
     
     addElement(createObjectElement(function () {
-        /*bctx.beginPath();
-        bctx.fillStyle = "#464451"; 
-        bctx.rect(relSizeX()/2-200, relSizeY()/2-100, this.width, this.height);
-        bctx.fill();*/
         drawBox(relSizeX()/2-200, relSizeY()/2-100, this.width, this.height, "#464451");
-        
         bctx.beginPath();
         bctx.font = "80pt Calibri";
         bctx.textAlign = "center";
