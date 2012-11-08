@@ -14,6 +14,7 @@ function fieldPage() {
         drawTowerTop(100,100,100,50);
         drawTowerBottom(50,400,200,50);
         drawTowerCore(130,150,40,250);
+        
     }
     
     var cardMouseDown = function (evt) {

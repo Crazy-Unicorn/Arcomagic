@@ -4,6 +4,21 @@ function startPage() {
 
     background.draw = function () {
         drawBox(0, 0, relSizeX(), relSizeY(), "black");
+        
+        var img = resource["card"].image;
+        bctx.drawImage(img, 200, 400);
+        var matr = bctx.getImageData(200, 400, img.width, img.height);
+        var pixels = matr.data;
+        for (var i = 0, il = pixels.length; i < il; i += 4) {
+            // так как шум монохромный, в каналы R, G и B кладём одно и то же значение
+            pixels[i] = pixels[i]*2;
+            
+            pixels[i+1] = pixels[i+1]*0.2;
+            pixels[i+2] = pixels[i+2]*0.2;
+            // делаем пиксель непрозрачным
+            pixels[i+3] = pixels[i+3]*0.95;
+        }
+        bctx.putImageData(matr, 200, 400);
     }
     
     var evs = new Object();
@@ -19,7 +34,7 @@ function startPage() {
             waitingPage();
         }
     });
-    
+   
     addElement(createObjectElement(function () {
         drawBox(relSizeX()/2-200, relSizeY()/2-100, this.width, this.height, "#464451");
         bctx.beginPath();

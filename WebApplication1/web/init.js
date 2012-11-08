@@ -141,6 +141,10 @@ function init_resources () {
         "image" : null,
         "src" : "res/skull.PNG"
     };
+    resource["card"] = {
+        "image" : null,
+        "src" : "res/card.png"
+    };
     //var count = getResourcesCount();
 
     //drawStartStripe(0, count);
