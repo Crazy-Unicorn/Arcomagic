@@ -38,7 +38,7 @@ function waitingPage() {
                 break;
         }
         element.draw = function () {
-            //background.draw();
+            //background.draw(); //
             bctx.beginPath();
             bctx.font = "80pt Garamond";
             bctx.textAlign = "center";

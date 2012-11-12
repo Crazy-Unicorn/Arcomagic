@@ -25,10 +25,17 @@ function startPage() {
     evs["mousedown"]=createEvent("mousedown", function (evt) {
         var cX = evt.clientX-canvasOffset.left;
         var cY = evt.clientY-canvasOffset.top;
-        var x_from = relSizeX()/2-200;
+        var dir_from = xy(relSizeX()/2-200, relSizeY()/2-100);
+        var dir_to = xy(relSizeX()/2+200, relSizeY()/2+100);
+        
+        /*var x_from = relSizeX()/2-200;
         var x_to = x_from + 400;
         var y_from = relSizeY()/2-100;
-        var y_to = y_from + 200;        
+        var y_to = y_from + 200; */
+        var x_from = dir_from.x;
+        var x_to = dir_to.x;
+        var y_from = dir_from.y;
+        var y_to = dir_to.y;
         if (cX>=x_from && cX<=x_to && cY>=y_from && cY<=y_to) {
             processed = true;
             waitingPage();
@@ -45,11 +52,11 @@ function startPage() {
         bctx.closePath();
     }, evs, 0,0,400,200));
 
-    addElement(createObjectElement(function () {
+    /*addElement(createObjectElement(function () {
         var img = resource["tbomm_title"].image;
         var co = xy(sizeX/2-img.width/2, 30);
         bctx.drawImage(img, co.x, co.y);
-    }, null));
+    }, null));*/
     
     drawCanvas();
     

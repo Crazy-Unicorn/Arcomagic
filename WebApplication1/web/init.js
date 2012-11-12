@@ -68,7 +68,34 @@ function drawCanv (timer) {
 
 function onScreen () {
     var bc = bctx.getImageData(0, 0, buffer.width, buffer.height);
-    ctx.putImageData(bc, 000, 000);
+    if (!horizontal) {
+        ctx.putImageData(bc, 000, 000);
+    } else {
+        var pixels = bc.data;
+        var rotatedPixels = new Array(pixels.length);
+        for (var j = 0; j < sizeY; j++) {
+            for (var i = 0; i < sizeX; i++) {
+                /*rotatedPixels[((sizeX-1-i)*sizeY+j)*4] = pixels[(j*sizeX+i)*4];
+                rotatedPixels[((sizeX-1-i)*sizeY+j)*4+1] = pixels[(j*sizeX+i)*4+1];
+                rotatedPixels[((sizeX-1-i)*sizeY+j)*4+2] = pixels[(j*sizeX+i)*4+2];
+                rotatedPixels[((sizeX-1-i)*sizeY+j)*4+3] = pixels[(j*sizeX+i)*4+3];*/
+                var co0 = j*sizeX;
+                var co1 = (co0+i)*4;
+                var co2 = (co0+(sizeX-1-i))*4;
+                /*rotatedPixels[co2] = pixels[co1];
+                rotatedPixels[co2+1] = pixels[co1+1];
+                rotatedPixels[co2+2] = pixels[co1+2];
+                rotatedPixels[co2+3] = pixels[co1+3];*/
+                //pixels[co1] = 100;
+                //pixels[co1+1] = 0;
+                //pixels[co1+2] = 200;
+                //pixels[co1+3] = 200;
+                //pixels = rotatedPixels;
+            }
+        }
+        ctx.putImageData(bc, 000, 000);
+        //alert(1)
+    }
 }
 
 function drawBackground() {
@@ -213,8 +240,8 @@ function startGame() {
         canvasOffset = getOffset(canvas);
 
         buffer = document.createElement('canvas');
-        buffer.width = relSizeX();
-        buffer.height = relSizeY();
+        buffer.width = sizeX;//relSizeX();
+        buffer.height = sizeY;//relSizeY();
 
         bctx = buffer.getContext("2d");
 
