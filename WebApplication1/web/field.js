@@ -3,8 +3,8 @@ function fieldPage() {
     clearElements();
 
     background.draw = function () {
-        drawBox(0,0,relSizeX(),relSizeY(),"green");
-        drawBox(relSizeX()/2-500, relSizeY()/2+75, 150, 200,"brown");
+        drawBox(0,0,relSizeX(),relSizeY(),"#DDDDDD");
+        /*drawBox(relSizeX()/2-500, relSizeY()/2+75, 150, 200,"brown");
         drawBox(relSizeX()/2-330, relSizeY()/2+75, 150, 200,"brown");
         drawBox(relSizeX()/2-160, relSizeY()/2+75, 150, 200,"brown");
         drawBox(relSizeX()/2+10, relSizeY()/2+75, 150, 200,"brown");
@@ -13,11 +13,13 @@ function fieldPage() {
         drawResources();
         drawTowerTop(100,100,100,50);
         drawTowerBottom(50,400,200,50);
-        drawTowerCore(130,150,40,250);
+        drawTowerCore(130,150,40,250);*/
         
     }
     
-    var cardMouseDown = function (evt) {
+ 
+ 
+     var cardMouseDown = function (evt) {
         var cX = evt.clientX-canvasOffset.left;
         var cY = evt.clientY-canvasOffset.top;
         var x_from = this.el.x;
@@ -37,6 +39,7 @@ function fieldPage() {
             drawCanvas();
             processed = true;
         }
+        ///alert(cX + " " + cY);//!@#
     }
 
     var cardMouseUp = function (evt) {
@@ -45,9 +48,10 @@ function fieldPage() {
             if (this.el.waiting===false) {
                 this.el.restore();
                 this.el.draw = this.el.oldDraw;
+                drawCanvas();
                 //alert(this.el.oldDraw)
             }
-            drawCanvas();
+            //drawCanvas();
             tracker.id = null;
             processed = true;
         }
@@ -57,9 +61,10 @@ function fieldPage() {
         if (tracker.id===this.el.id) {
             if (this.el.waiting===false) {
                 this.el.restore();
-                this.el.draw = this.el.oldDraw;                
+                this.el.draw = this.el.oldDraw;    
+                drawCanvas();
             }
-            drawCanvas();
+            //drawCanvas();
             tracker.id = null;
             processed = true;
         }
@@ -93,7 +98,7 @@ function fieldPage() {
                         drawBox(this.x, this.y, this.width, this.height, this.color);
                     }
             
-                    drawCanvas(); 
+                    ///drawCanvas(); 
                     this.el.waiting=true;
                     this.el.events["mouseup"].process(evt);
                     
@@ -141,14 +146,133 @@ function fieldPage() {
             processed = true;
         }
     }
-   
+    
     
     function colorCard (color, card) {
         drawBox(card.x, card.y, card.width, card.height, color);
         card.color = color;
     }
     
-    addElement(createObjectElement(function() {colorCard("yellow", this);}, null, relSizeX()/2-500, relSizeY()/2+75, 150, 200)
+    function tower1 (shift, min, max) { //190, 70   до 350
+        //var min = 5; //70;
+        //var max = 420; //350;
+
+        var top = resource["tower_top_player1"].image;
+        var core = resource["tower"].image;
+        var dist = (2 + max - min - top.height)*player1.hp/maxhp;
+        var disp = (top.width-core.width)/2;
+        bctx.drawImage(top, shift, max-dist - top.height);
+        bctx.drawImage(core, shift+disp, max-dist);
+        //drawBox(150, min-5, 200, 5, "blue");
+        //drawBox(150, max, 200, 5, "blue");
+    }
+
+    function tower2 (shift, min, max) { //190, 70   до 350
+        //var min = 5;
+        //var max = 420;
+
+        var top = resource["tower_top_player2"].image;
+        var core = resource["tower"].image;
+        var dist = (2 + max - min - top.height)*player2.hp/maxhp;
+        var disp = (top.width-core.width)/2;
+        bctx.drawImage(top, shift, max-dist - top.height);
+        bctx.drawImage(core, shift+disp, max-dist);
+        //drawBox(750, min-5, 200, 5, "blue");
+        //drawBox(750, max, 200, 5, "blue");
+    }
+    
+    function tower (number, shift, min, max) {
+
+        var top = resource["tower_top_player"+number].image;
+        var core = resource["tower"].image;
+        var dist = Math.min((/*2 +*/ max - min - top.height),core.height);
+        if (number===1)
+            dist = dist * player1.hp/maxhp;
+        else
+            dist = dist * player2.hp/maxhp;
+        var disp = (top.width-core.width)/2;
+        bctx.drawImage(top, shift, max-dist - top.height);
+        bctx.drawImage(core, shift+disp, max-dist);
+
+    }
+    
+    function towers () {
+        var min = 5;
+        var max = 490;
+        
+        tower(1, 190, min, max);
+        tower(2, 890, min, max);
+    }
+
+    function drawBottom () {
+        drawBox(0, 490, sizeX, sizeY-420, "#AABBAA");
+    }
+
+    function drawBorder () {
+        var borderColor = "#446644"; //"#AAEEAA"
+        drawBox(0, 0, 7, sizeY, borderColor);
+        drawBox(0, 0, sizeX, 7, borderColor);
+        drawBox(0, sizeY-7, sizeX, 7, borderColor);
+        drawBox(sizeX-7, 0, 7, sizeY, borderColor);
+    }
+
+    function wall (number, shift, min, max) {
+
+        var wall = resource["wall"].image;
+
+        var dist = Math.min((2 + max - min), wall.height);
+        if (number===1)
+            dist = dist * player1.wall/maxwall;
+        else
+            dist = dist * player2.wall/maxwall;
+
+            //alert(dist)
+        bctx.drawImage(wall, shift, max-dist);
+        //drawBox(shift-100, max-Math.min((2 + max - min), wall.height)-5, 200, 5, "blue")
+        //drawBox(shift-100, max, 200, 5, "blue")
+    }
+
+    function walls () {
+        var min = 5;
+        var max = 490;
+        
+        wall(1, 340, min, max);
+        wall(2, 810, min, max);
+    }
+
+    /*function resources1 () {
+        
+    }
+    
+    function resources2 () {
+        
+    }*/
+
+    /*function resources (number, x) {
+
+
+    }
+
+    function resourcesAll () {
+        //resources1();
+        //resources2();
+        resources(1, 20);
+        resources(2, );
+    }*/
+
+    //addElement(createObjectElement(resources));
+    
+    addElement(createObjectElement(towers));
+    addElement(createObjectElement(walls));
+    
+    addElement(createObjectElement(drawBottom));
+    addElement(createObjectElement(drawBorder));
+    
+    var cardY = relSizeY()/2+145;
+    
+    addElement(createObjectElement(function() {
+        colorCard("yellow", this);
+    }, null, relSizeX()/2-500, cardY, 150, 200)
     .addEvent("mousedown", cardMouseDown)
     .addEvent("mouseup", cardMouseUp)
     .addEvent("mousemove", cardMouseMove)
@@ -156,7 +280,7 @@ function fieldPage() {
     
     addElement(createObjectElement(function () {
         colorCard("magenta", this);
-    }, null, relSizeX()/2-330, relSizeY()/2+75, 150, 200)
+    }, null, relSizeX()/2-330, cardY, 150, 200)
         .addEvent("mousedown", cardMouseDown)
         .addEvent("mouseup", cardMouseUp)
         .addEvent("mousemove", cardMouseMove)
@@ -165,7 +289,7 @@ function fieldPage() {
 
     addElement(createObjectElement(function () {
         colorCard("cyan", this);
-    }, null, relSizeX()/2-160, relSizeY()/2+75, 150, 200)
+    }, null, relSizeX()/2-160, cardY, 150, 200)
         .addEvent("mousedown", cardMouseDown)
         .addEvent("mouseup", cardMouseUp)
         .addEvent("mousemove", cardMouseMove)
@@ -174,7 +298,7 @@ function fieldPage() {
 
     addElement(createObjectElement(function () {
         colorCard("grey", this);
-    }, null, relSizeX()/2+10, relSizeY()/2+75, 150, 200)
+    }, null, relSizeX()/2+10, cardY, 150, 200)
         .addEvent("mousedown", cardMouseDown)
         .addEvent("mouseup", cardMouseUp)
         .addEvent("mousemove", cardMouseMove)
@@ -184,7 +308,7 @@ function fieldPage() {
 
     addElement(createObjectElement(function () {
         colorCard("blue", this);
-    }, null, relSizeX()/2+180, relSizeY()/2+75, 150, 200)
+    }, null, relSizeX()/2+180, cardY, 150, 200)
         .addEvent("mousedown", cardMouseDown)
         .addEvent("mouseup", cardMouseUp)
         .addEvent("mousemove", cardMouseMove)
@@ -193,7 +317,7 @@ function fieldPage() {
 
    addElement(createObjectElement(function () {
        colorCard("black", this);
-    }, null, relSizeX()/2+350, relSizeY()/2+75, 150, 200)
+    }, null, relSizeX()/2+350, cardY, 150, 200)
         .addEvent("mousedown", cardMouseDown)
         .addEvent("mouseup", cardMouseUp)
         .addEvent("mousemove", cardMouseMove)
@@ -207,8 +331,12 @@ function fieldPage() {
        gameResource.name = name;
        gameResource.production = production;
        gameResource.amount = amount;
-       var resName = name;
-       gameResource.img = resource[resName].image;
+       var resName = "res_"+name;
+       try {
+        gameResource.img = resource[resName].image;
+       } catch (e) {
+           gameResource.img = new Image();
+       }
        return gameResource;
     }
 
@@ -220,20 +348,27 @@ function fieldPage() {
         var player = new Object();
         player.name = name;
         player.resources = [];
+        player.hp = 100;
+        player.wall = 100;
         return player;
     }   
        
+    maxhp = 100;
+    maxwall = 100;  
     //player1 = "Player 1";
     //player2 = "Player 2";
     
-    var player1 = player("Player 1");
+    var player1 = player("Player ITHETESTER");//player("Player 1");
    
+   
+    player1.resources["water"] = gameResource("water",500,1000);
+    player1.resources["necro"] = gameResource("necro",10,75);
     player1.resources["bricks"] = gameResource("bricks",2,5);
-    player1.resources["gems"] = gameResource("gems",2,5);
-    player1.resources["beasts"] = gameResource("beasts",2,5);
+    //player1.resources["gems"] = gameResource("gems",2,5);
+    //player1.resources["beasts"] = gameResource("beasts",2,5);
     //player1.resources["recruits"] = gameResource("recruits",2,5);
     
-    var player2 = player("Player 2");
+    var player2 = player("Enemy  MYOWNENEMY");//player("Player 2");
     
     player2.resources["bricks"] = gameResource("bricks",2,5);
     player2.resources["skull"] = gameResource("skull",2,5);
@@ -242,20 +377,152 @@ function fieldPage() {
     
     var currentPlayer = player2;
     
+    function drawResource (type, x, y, production, amount) {
+
+        var color1 = "white";
+        var color2 = "grey";
+        var color3 = "white";
+        var colorT = "black";
+        
+        switch (type) {
+            case 'life':
+                color1 = "white";
+                color2 = "grey";
+                color3 = "white";
+                colorT = "black";
+                break;
+            case 'necro':
+                color1 = "black";
+                color2 = "#4bfc3a";
+                color3 = "black";
+                colorT = "#4bfc3a";
+                break;
+            case 'water':
+                color1 = "#008080";
+                color2 = "#120a8f";
+                color3 = "#dfe6fc";
+                colorT = "#000080";
+                break;
+        }
+            
+        var width = 100;
+        var height = 100;
+        drawBox(x, y, width, height, color1);
+        //var r = 6;
+        //drawStrokeBox(x+r, y+r, width-r*2, height-r*2, "grey");
+        //r = 7;
+        //drawStrokeBox(x+r, y+r, width-r*2, height-r*2, "grey");
+        var r = 5;//5
+        drawBox(x+r, y+r, width-r*2, height-r*2, color2);
+        r = 12;//8
+        drawBox(x+r, y+r, width-r*2, height-r*2, color3);
+
+        try {
+            var img = resource["res_"+type].image;
+            bctx.drawImage(img, x+(width-img.width)/2, y+(height-img.height)/4);
+        } catch (e) {
+            var img = resource["skull"].image;
+            bctx.drawImage(img, x+(width-img.width)/2, y+(height-img.height)/4);
+        }
+        
+        bctx.beginPath();
+        bctx.font = "italic 25pt Arial";
+        bctx.textAlign = "center";
+        bctx.fillStyle = colorT;
+        bctx.fillText('/', x+width/2, y+height*5/6);
+        
+        bctx.font = "bold 13pt Arial";
+        bctx.textAlign = "right";
+        bctx.fillStyle = colorT;
+        bctx.fillText(production, x+width*2/5, y+height*3/4);
+        
+        bctx.font = "bold 13pt Arial";
+        bctx.textAlign = "left";
+        bctx.fillStyle = colorT;
+        bctx.fillText(amount, x+width*3/5, y+height*4/5);
+        bctx.closePath();
+    }
+
+    function drawResourc (type, x, y, production, amount) {
+        var width = 150;
+        var height = 40;
+        
+        var color1 = "grey";
+        var color2 = "white";
+        var colorT = "black";
+        
+        switch (type) {
+            case 'life':
+                color1 = "grey";
+                color2 = "white";
+                colorT = "black";
+                break;
+            case 'necro':
+                color1 = "#4bfc3a";
+                color2 = "black";
+                colorT = "#4bfc3a";
+                break;
+            case 'water':
+                color1 = "#120a8f";//"#008080";
+                color2 = "#c7e9f7";//"#120a8f";
+                colorT = "#000080";
+                break;
+        }
+        
+        drawBox(x, y, width, height, color1);
+        var r = 3;
+        drawBox(x+r, y+r, width-r*2, height-r*2, color2);
+        
+        try {
+            var img = resource["res_"+type].image;
+            bctx.drawImage(img, x+r*2, y+(height-img.height)/2);
+        } catch (e) {
+            var img = resource["skull"].image;
+            bctx.drawImage(img, x+r*2, y+(height-img.height)/2);
+        }
+        
+        var fontSize = 15;
+        
+        bctx.beginPath();
+
+        bctx.font = "bold "+fontSize+"pt Arial";
+        bctx.textAlign = "left";
+        bctx.fillStyle = colorT;
+        bctx.fillText("+"+production, x+r*2+img.width+5, y+r*2+fontSize+4);
+        
+        bctx.font = "italic 20pt Arial";
+        bctx.textAlign = "center";
+        bctx.fillStyle = colorT;
+        bctx.fillText('/', x+r*2+img.width+5+50, y+r*2+20+4);
+        
+        bctx.font = "bold "+fontSize+"pt Arial";
+        bctx.textAlign = "right";
+        bctx.fillStyle = colorT;
+        bctx.fillText(amount, x+width-r*2-5, y+r*2+fontSize+4);
+        bctx.closePath();
+        
+    }
+
     function drawResources() {
-        var i=0;
-        var height=0;
+
+        var height=40;
         for (var res in player1.resources) {
-            if (player1.resources[res].img) {
+            //drawResource(player1.resources[res].name, 20, 80+height, player1.resources[res].production, player1.resources[res].amount);
+            //height+=107;
+            
+            drawResourc(player1.resources[res].name, 20, 80+height, player1.resources[res].production, player1.resources[res].amount);
+            height+=46;
+            
+            /*if (player1.resources[res].img) {
                 bctx.drawImage(player1.resources[res].img, 20, 70+height);
                 height+=player1.resources[res].img.height;
                 i++;
-            }
+            }*/
         }
-        i=0;
+
         height=0;
         for (var res in player2.resources) {
-            if (player2.resources[res].img) {
+            /*if (player2.resources[res].img) {
                 if (res != 'skull') {
                     bctx.drawImage(player2.resources[res].img, relSizeX()-20-player2.resources[res].img.width, 70+height);
                     height+=player2.resources[res].img.height;
@@ -267,8 +534,9 @@ function fieldPage() {
                     i++;
                 }
                     
-            }
+            }*/
         }
+        //drawResource("life", 20, 80, 55, 250);
     }
     
     function card (name, type, img, requirements, addndis, damage/*damage4Enemy, damage4Me*/, description) { //damage4ResourceDwellings /*объект*/, damage4Resources /*объект*/,) {
@@ -283,6 +551,8 @@ function fieldPage() {
     }
     
     
+    addElement(createObjectElement(drawResources));
+    
     addElement(createObjectElement(function () {
         
         drawBox(this.x, this.y, this.width, this.height, "black");
@@ -294,10 +564,10 @@ function fieldPage() {
         drawBox(this.x+r, this.y+r, this.width-r*2, this.height-r*2, "black");
         
                     bctx.beginPath();
-                    bctx.font = "20pt Arial";
+                    bctx.font = "15pt Arial";//"20pt Arial";
                     bctx.textAlign = "center";
                     bctx.fillStyle = "white";
-                    bctx.fillText(player1.name, this.x+this.width/2, this.y+this.height/2+10);
+                    bctx.fillText(player1.name, this.x+this.width/2, this.y+this.height/2+7);
                     bctx.closePath();
                     
                     
@@ -305,14 +575,14 @@ function fieldPage() {
             drawBox(this.x+this.width+10, this.y+5, this.width/2, this.height-10, "black");
 
                         bctx.beginPath();
-                        bctx.font = "15pt Arial";
+                        bctx.font = "10pt Arial";//"15pt Arial";
                         bctx.textAlign = "center";
                         bctx.fillStyle = "white";
                         bctx.fillText("Ходит", this.x+this.width+10+this.width/4, this.y+5+(this.height-10)/2+5);
                         bctx.closePath();
         }      
         
-    }, null, 20, 20, 200, 40)  );
+    }, null, 20, 10, 150, 30)  );
         
     addElement(createObjectElement(function () {
         drawBox(this.x, this.y, this.width, this.height, "black");
@@ -324,17 +594,17 @@ function fieldPage() {
         drawBox(this.x+r, this.y+r, this.width-r*2, this.height-r*2, "black");
         
                     bctx.beginPath();
-                    bctx.font = "20pt Arial";
+                    bctx.font = "15pt Arial";//"20pt Arial";
                     bctx.textAlign = "center";
                     bctx.fillStyle = "white";
-                    bctx.fillText(player2.name, this.x+this.width/2, this.y+this.height/2+10);
+                    bctx.fillText(player2.name, this.x+this.width/2, this.y+this.height/2+7);
                     bctx.closePath();
 
         if (currentPlayer.name === player2.name) {
             drawBox(this.x-this.width/2-10, this.y+5, this.width/2, this.height-10, "black");
 
                         bctx.beginPath();
-                        bctx.font = "15pt Arial";
+                        bctx.font = "10pt Arial";//"15pt Arial";
                         bctx.textAlign = "center";
                         bctx.fillStyle = "white";
                         bctx.fillText("Ходит", this.x-this.width/2-10+this.width/4, this.y+5+(this.height-10)/2+5);
@@ -342,7 +612,7 @@ function fieldPage() {
         }
         
         
-    }, null, relSizeX()-20-200, 20, 200, 40)  );
+    }, null, relSizeX()-20-200, 10, 150, 30)  );
     
     
     function drawTowerTop(x, y, width, height) {
@@ -443,6 +713,8 @@ function fieldPage() {
         bctx.fill();
     }, null));
     */
+ 
+
  
     drawCanvas();
     

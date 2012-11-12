@@ -45,13 +45,26 @@ function xy_y (horizontal, x, y) {
     
 }*/
 
+drawing = false;
+
 function drawCanvas () {
+
+    if (drawing===false) {
+        var timer = setInterval(function () {drawCanv(timer);}, 1);
+    }
+    drawing = false;
+    //drawCanv(null);
+}
+
+function drawCanv (timer) {
 
     drawBackground();
     drawElements();
     onScreen();
-}
+    if (typeof timer !=='undefined')
+        clearInterval(timer);
 
+}
 
 function onScreen () {
     var bc = bctx.getImageData(0, 0, buffer.width, buffer.height);
@@ -145,19 +158,30 @@ function init_resources () {
         "image" : null,
         "src" : "res/card.png"
     };
-    //var count = getResourcesCount();
-
-    //drawStartStripe(0, count);
-    
+    resource["tower"] = {
+        "image" : null,
+        "src" : "res/tower_player.png"
+    };
+    resource["wall"] = {
+        "image" : null,
+        "src" : "res/wall.png"
+    };
+    resource["tower_top_player1"] = {
+        "image" : null,
+        "src" : "res/player1_tower_top.png"
+    };
+    resource["tower_top_player2"] = {
+        "image" : null,
+        "src" : "res/player2_tower_top.png"
+    };
+    resource["res_water"] = {
+        "image" : null,
+        "src" : "res/res_water.PNG"
+    };
     for (var key in resource) {
-        /*hiddenImg= new Image();
-        hiddenImg.src= resource[key].src;
-        resource[key].image = hiddenImg;*/
         resource[key].image = new Image();
         resource[key].image.src = resource[key].src;
         lctx.drawImage(resource[key].image, 0, 0);
-        //alert(resource[key].image.width);
-        //alert(resource[key].image.width);
     }
 }
 
@@ -219,13 +243,13 @@ function startGame() {
         
         onScreen();
         
-        setTimeout(startPage, 300); //135!!!
+        setTimeout(startPage, 300);
     }
 }
 
 function init_events () {
         
-        events = new Object();// = [];
+        events = new Object();
         
         canvas.addEventListener('mouseleave', mouseHandler, false);
         canvas.addEventListener('mouseenter', mouseHandler, false);
@@ -415,6 +439,13 @@ function drawBox(x,y,width,height,color) {
         bctx.rect(x, y, width, height);
         bctx.fill();
         bctx.closePath();
+}
+
+function drawStrokeBox(x,y,width,height,color) {
+            bctx.beginPath();
+            bctx.strokeStyle = color; 
+            bctx.strokeRect(x, y, width, height);
+            bctx.closePath();
 }
 
 /*
