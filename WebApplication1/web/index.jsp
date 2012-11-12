@@ -1,7 +1,7 @@
 <%-- 
     Document   : index
     Created on : Oct 2, 2012, 6:03:29 PM
-    Author     : goryunov vladimir!
+    Author     : goryunov vladimir! 11
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
