@@ -7,6 +7,8 @@ function xy_res (horizontal, res) {
     
 }*/
 
+horizontal = false;
+
 function xy_res (res) {
     if (horizontal) {
         return {"x":res["x"], "y":res["y"]}}
@@ -19,7 +21,8 @@ function xy (x, y) {
     if (horizontal) {
         return {"x":x, "y":y}}
     else {
-        return {"x":y, "y":sizeX-x}}
+	return {"x":y, "y":x}}
+        //return {"x":y, "y":sizeX-x}}
     
 }
 
@@ -68,32 +71,80 @@ function drawCanv (timer) {
 
 function onScreen () {
     var bc = bctx.getImageData(0, 0, buffer.width, buffer.height);
-    if (!horizontal) {
+    if (horizontal===true) {
         ctx.putImageData(bc, 000, 000);
     } else {
+        var conte = ctx.getImageData(0, 0, canvas.width, canvas.height);
+var cpix = conte.data;
         var pixels = bc.data;
-        var rotatedPixels = new Array(pixels.length);
-        for (var j = 0; j < sizeY; j++) {
-            for (var i = 0; i < sizeX; i++) {
+        //var rotatedPixels = new Array(pixels.length);
+        var i = 0;
+        var j = 0;
+        var co0 = 0;
+        var co1 = 0;
+        var co2 = 0;
+        var co3 = 0;
+        
+        //var arrayToCopy = [ 1, 2, 3, 4, 5 ];
+
+        //var copyOfArray = [].concat(arrayToCopy);
+        
+        //alert(pixels)
+        
+        //var oldPixels = pixels.concat();
+        //alert(oldPixels.length)
+        var l = pixels.length;
+        //alert(l)
+        for (j = 0; j < sizeY; j++) {
+            for (i = 0; i < sizeX; i++) {
                 /*rotatedPixels[((sizeX-1-i)*sizeY+j)*4] = pixels[(j*sizeX+i)*4];
                 rotatedPixels[((sizeX-1-i)*sizeY+j)*4+1] = pixels[(j*sizeX+i)*4+1];
                 rotatedPixels[((sizeX-1-i)*sizeY+j)*4+2] = pixels[(j*sizeX+i)*4+2];
                 rotatedPixels[((sizeX-1-i)*sizeY+j)*4+3] = pixels[(j*sizeX+i)*4+3];*/
-                var co0 = j*sizeX;
-                var co1 = (co0+i)*4;
-                var co2 = (co0+(sizeX-1-i))*4;
-                /*rotatedPixels[co2] = pixels[co1];
-                rotatedPixels[co2+1] = pixels[co1+1];
-                rotatedPixels[co2+2] = pixels[co1+2];
-                rotatedPixels[co2+3] = pixels[co1+3];*/
+
+                co0 = j*sizeX;
+                co1 = (co0+i)*4;
+                co2 = (co0+(sizeX-1-i))*4;
+                co3 = ((sizeX-1-i)*sizeY+j)*4;
+
+                //rotatedPixels[co3] = 100;//100;//pixels[co1];//co1*250/l;//pixels[co1];
+                //rotatedPixels[co3+1] = 100;//200;//pixels[co1+1];//co1*250/l;//pixels[co1+1];
+                //rotatedPixels[co3+2] = 100;//0;//pixels[co1+2];//co1*250/l;//pixels[co1+2];
+                //rotatedPixels[co3+3] = pixels[co1+3];//200;//pixels[co1+3];//co1*250/l;//pixels[co1+3];
+                //if (co3<0 || co3 > l)
+                //    alert('err')
                 //pixels[co1] = 100;
                 //pixels[co1+1] = 0;
                 //pixels[co1+2] = 200;
                 //pixels[co1+3] = 200;
                 //pixels = rotatedPixels;
+
+	cpix[co3] = pixels[co1];
+                cpix[co3+1] = pixels[co1+1];
+                cpix[co3+2] = pixels[co1+2];
+                cpix[co3+3] = pixels[co1+3];
+
             }
         }
-        ctx.putImageData(bc, 000, 000);
+        
+        
+        //for (var k = 0; k < pixels.length; k++) 
+            //pixels[k] = rotatedPixels[k];
+        /*for (j = 0; j < sizeY; j++) {
+            for (i = 0; i < sizeX; i++) {
+                co0 = j*sizeX;
+                co1 = (co0+i)*4;
+                co2 = (co0+(sizeX-1-i))*4;
+                co3 = ((sizeX-1-i)*sizeY+j)*4;
+                pixels[co1] = rotatedPixels[co1];
+                pixels[co1+1] = rotatedPixels[co1+1];
+                pixels[co1+2] = rotatedPixels[co1+2];
+                pixels[co1+3] = rotatedPixels[co1+3];
+            }
+        }*/
+        //pixels = rotatedPixels;
+        //ctx.putImageData(bc, 000, 000);
+ctx.putImageData(conte, 000, 000);
         //alert(1)
     }
 }
@@ -225,7 +276,7 @@ function startGame() {
 
     //alert("width = "+getClientWidth() +" & height = "+getClientHeight() );
 
-    horizontal = true;
+    //horizontal = false;
 
     sizeX = 1280;//300;//1280;
     sizeY = 720;//480;//720;

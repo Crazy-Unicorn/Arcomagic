@@ -3,9 +3,10 @@ function startPage() {
     clearElements();
 
     background.draw = function () {
-        drawBox(0, 0, relSizeX(), relSizeY(), "black");
+	drawBox(0, 0, sizeX, sizeY, "black");
+        //drawBox(0, 0, relSizeX(), relSizeY(), "black");
         
-        var img = resource["card"].image;
+        /*var img = resource["card"].image;
         bctx.drawImage(img, 200, 400);
         var matr = bctx.getImageData(200, 400, img.width, img.height);
         var pixels = matr.data;
@@ -18,16 +19,19 @@ function startPage() {
             // делаем пиксель непрозрачным
             pixels[i+3] = pixels[i+3]*0.95;
         }
-        bctx.putImageData(matr, 200, 400);
+        bctx.putImageData(matr, 200, 400);*/
     }
     
     var evs = new Object();
     evs["mousedown"]=createEvent("mousedown", function (evt) {
         var cX = evt.clientX-canvasOffset.left;
         var cY = evt.clientY-canvasOffset.top;
-        var dir_from = xy(relSizeX()/2-200, relSizeY()/2-100);
-        var dir_to = xy(relSizeX()/2+200, relSizeY()/2+100);
+        var dir_from = xy(sizeX/2-200, sizeY/2-100);
+        var dir_to = xy(sizeX/2+200, sizeY/2+100);
         
+//alert(sizeX/2-200)
+//alert(cX+" "+cY+" "+dir_from.x+" "+dir_to.x+" "+dir_from.y+" "+dir_to.y)
+
         /*var x_from = relSizeX()/2-200;
         var x_to = x_from + 400;
         var y_from = relSizeY()/2-100;
@@ -38,25 +42,27 @@ function startPage() {
         var y_to = dir_to.y;
         if (cX>=x_from && cX<=x_to && cY>=y_from && cY<=y_to) {
             processed = true;
+//alert(0)
             waitingPage();
         }
     });
    
     addElement(createObjectElement(function () {
-        drawBox(relSizeX()/2-200, relSizeY()/2-100, this.width, this.height, "#464451");
+        //drawBox(relSizeX()/2-200, relSizeY()/2-100, this.width, this.height, "#464451");
+        drawBox(sizeX/2-200, sizeY/2-100, this.width, this.height, "#464451");
         bctx.beginPath();
         bctx.font = "80pt Calibri";
         bctx.textAlign = "center";
         bctx.fillStyle = "red";
-        bctx.fillText("START!", relSizeX()/2, relSizeY()/2);
+        bctx.fillText("START!", sizeX/2, sizeY/2);//relSizeX()/2, relSizeY()/2);
         bctx.closePath();
     }, evs, 0,0,400,200));
 
-    /*addElement(createObjectElement(function () {
+    addElement(createObjectElement(function () {
         var img = resource["tbomm_title"].image;
         var co = xy(sizeX/2-img.width/2, 30);
         bctx.drawImage(img, co.x, co.y);
-    }, null));*/
+    }, null));
     
     drawCanvas();
     

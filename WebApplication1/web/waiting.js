@@ -5,7 +5,8 @@ function waitingPage() {
     addElement(createObjectElement(function () {
         bctx.beginPath();
         bctx.fillStyle = "black"; 
-        bctx.rect(0, 0, relSizeX(), relSizeY());
+        //bctx.rect(0, 0, relSizeX(), relSizeY());
+	bctx.rect(0, 0, sizeX, sizeY);
         bctx.fill();
         bctx.closePath();
         
@@ -13,7 +14,8 @@ function waitingPage() {
         bctx.font = "80pt Garamond";
         bctx.textAlign = "center";
         bctx.fillStyle = "white";
-        bctx.fillText("Waiting...", relSizeX()/2, relSizeY()/2);
+        //bctx.fillText("Waiting...", relSizeX()/2, relSizeY()/2);
+bctx.fillText("Waiting...", sizeX()/2, sizeY()/2);
         bctx.closePath();
     }, null));
 
@@ -43,7 +45,8 @@ function waitingPage() {
             bctx.font = "80pt Garamond";
             bctx.textAlign = "center";
             bctx.fillStyle = "white";
-            bctx.fillText("Waiting"+po, relSizeX()/2, relSizeY()/2);
+            //bctx.fillText("Waiting"+po, relSizeX()/2, relSizeY()/2);
+bctx.fillText("Waiting"+po, sizeX/2, sizeY/2);
             bctx.closePath();
         }        
         addElement(element);

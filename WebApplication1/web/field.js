@@ -107,6 +107,10 @@ function fieldPage() {
                     bctx.textAlign = "center";
                     bctx.fillStyle = "red";
                     bctx.fillText("Выбрал", relSizeX()/2, relSizeY()/3);
+                    doPain();
+                    doGain();
+                    changeCurrentPlayer();
+                    
                     bctx.closePath();
                     
                     onScreen();
@@ -375,7 +379,7 @@ function fieldPage() {
     //player2.resources["gems"] = resource("gems",2,5);
     //player2.resources["recruits"] = resource("recruits",2,5);
     
-    var currentPlayer = player2;
+    var currentPlayer = player1;
     
     function drawResource (type, x, y, production, amount) {
 
@@ -522,6 +526,8 @@ function fieldPage() {
 
         height=0;
         for (var res in player2.resources) {
+            drawResourc(player2.resources[res].name, relSizeX()-20-150, 80+height, player2.resources[res].production, player2.resources[res].amount);
+            height+=46;
             /*if (player2.resources[res].img) {
                 if (res != 'skull') {
                     bctx.drawImage(player2.resources[res].img, relSizeX()-20-player2.resources[res].img.width, 70+height);
@@ -714,8 +720,68 @@ function fieldPage() {
     }, null));
     */
  
+    function changeCurrentPlayer() {
+        if (currentPlayer === player1) {
+            currentPlayer = player2;
+        } else {
+            currentPlayer = player1;
+        }
+    }
 
+    function doPain() {
+        if (currentPlayer === player1) {
+            changeHp(player2, -10);
+            doDamage(player2, -25);
+            //changeWall(player2, 10);
+        } else {
+            changeHp(player1, -10);
+            doDamage(player1, -25);
+            //changeWall(player2, 10);
+        }
+        drawCanvas();
+    }
  
+    function changeHp (player, change) {
+        player.hp += change;
+        if (player.hp < 0)
+            player.hp = 0;
+        if (player.hp > maxhp)
+            player.hp = maxhp;
+    }
+
+    function changeWall (player, change) {
+        var oldwall = player.wall;
+        player.wall += change;
+        if (player.wall < 0) {
+            player.wall = 0;
+            return change+oldwall;
+        }
+        if (player.wall > maxhp)
+            player.wall = maxhp;
+        return 0;
+    }
+    
+    function doDamage (player, change) {
+        var tail = changeWall(player, change);
+        if (tail>0)
+            changeHp (player, tail);
+        if (player.hp <= 0) {
+            
+            alert(player.name+" проиграл!");
+            clearElements();
+        }
+    }
+
+    function doGain () {
+        for (var i in player1.resources) {
+            player1.resources[i].amount += player1.resources[i].production;
+        }
+        for (var i in player2.resources) {
+            player2.resources[i].amount += player2.resources[i].production;
+        }
+        drawCanvas();
+    }
+
     drawCanvas();
     
 }
