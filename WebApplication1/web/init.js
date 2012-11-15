@@ -1,4 +1,4 @@
-/*
+/*!
 function xy_res (horizontal, res) {
     if (horizontal) {
         return {"x":res["x"], "y":res["y"]}}
