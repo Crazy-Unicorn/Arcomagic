@@ -2,6 +2,12 @@ function fieldPage() {
 
     clearElements();
 
+var shiftbackright = 0;
+var shiftbackdirectionright = 1;
+var shiftbackdown = 0;
+var shiftbackdirectiondown = 2;
+
+
     background.draw = function () {
         drawBox(0,0,relSizeX(),relSizeY(),"#DDDDDD");
         /*drawBox(relSizeX()/2-500, relSizeY()/2+75, 150, 200,"brown");
@@ -16,7 +22,39 @@ function fieldPage() {
         drawTowerCore(130,150,40,250);*/
         //var img = resource["fon"].image;
         //bctx.drawImage(img, 0, 0);
-        drawPicture("fon", 0, 0);
+        //shiftback--;
+        if (shiftbackdirectionright===1)
+            shiftbackright-=2;
+        else
+            if (shiftbackdirectionright===0)
+                shiftbackright+=2;
+        if (shiftbackdirectiondown===1)
+            shiftbackdown-=2;
+        else
+            if (shiftbackdirectiondown===0)
+                shiftbackdown+=2;
+        
+        if ((shiftbackright===-1920+1280)&&(shiftbackdown===0)) {
+            shiftbackdirectionright = 2;
+            shiftbackdirectiondown = 1;
+        }
+        
+        if ((shiftbackright===-1920+1280)&&(shiftbackdown===-1080+720)) {
+            shiftbackdirectionright = 0;
+            shiftbackdirectiondown = 2;
+        }
+    
+        if ((shiftbackright===0)&&(shiftbackdown===-1080+720)) {
+            shiftbackdirectionright = 2;
+            shiftbackdirectiondown = 0;
+        }
+    
+        if ((shiftbackright===0)&&(shiftbackdown===0)) {
+            shiftbackdirectionright = 1;
+            shiftbackdirectiondown = 2;
+        }
+        drawPicture("fon", shiftbackright, shiftbackdown);
+        //drawPicture("fon", shiftback--, 0);
     }
     
  
@@ -38,6 +76,11 @@ function fieldPage() {
                 drawBox(this.x-5, this.y-5, this.width+10, this.height+10,"#f2de29");
                 drawBox(this.x, this.y, this.width, this.height,this.color);
             }
+             
+            /*this.el.draw = function () {
+                drawBox(this.x-5, this.y-5, this.width+10, this.height+10,"#f2de29");
+                drawBox(this.x, this.y, this.width, this.height,this.color);*/
+             
             drawCanvas();
             processed = true;
         }
@@ -143,6 +186,10 @@ function fieldPage() {
                     bctx.fillText("Скинул", relSizeX()/2, relSizeY()/3);
                     bctx.closePath();
                     
+                    doHeal();
+                    doGain();
+                    changeCurrentPlayer();
+                    
                     onScreen();
                     var el2 = this.el;
                     setTimeout(function() {el2.restore();el2.restoreDraw();drawCanvas();el2.waiting=false;}, 1000);
@@ -155,7 +202,21 @@ function fieldPage() {
     
     
     function colorCard (color, card) {
-        drawBox(card.x, card.y, card.width, card.height, color);
+        
+        //drawBox(card.x, card.y, card.width, card.height, color);
+        var img = resource["card"].image;
+        card.width = img.width;
+        card.height = img.height;
+        bctx.drawImage(img, card.x, card.y);
+        /*var matr = bctx.getImageData(card.x-10, card.y-10, card.width, card.height);
+        var pixels = matr.data;
+        for (var i = 0, il = pixels.length; i < il; i += 4) {
+            pixels[i] = pixels[i]*2;
+            pixels[i+1] = pixels[i+1]*0.2;
+            pixels[i+2] = pixels[i+2]*0.2;
+            pixels[i+3] = pixels[i+3]*0.95;
+        }
+        bctx.putImageData(matr, card.x-10, card.y-10);*/
         card.color = color;
     }
     
@@ -205,8 +266,8 @@ function fieldPage() {
         bctx.drawImage(core, shift+disp, max-dist);
 
         //drawBox(shift+disp+core.width/2-25, 450, 50, 30, "green")
-        drawLightening(shift+disp+core.width/2-18, 460, 36, 25, -50);
-        drawStrokeBox(shift+disp+core.width/2-18, 460, 36, 25, "white", 1);
+        drawLightening(shift+disp+core.width/2-17, 460, 34, 25, -50);
+        drawStrokeBox(shift+disp+core.width/2-17, 460, 34, 25, "white", 1);
         bctx.beginPath();
         var fontWidth = 15;
         bctx.font = "bold "+fontWidth+"pt Calibri";
@@ -254,8 +315,8 @@ function fieldPage() {
         //drawBox(shift-100, max, 200, 5, "blue")
         
         
-        drawLightening(shift+wall.width/2-18, 460, 36, 25, -50);
-        drawStrokeBox(shift+wall.width/2-18, 460, 36, 25, "white", 1);
+        drawLightening(shift+wall.width/2-17, 460, 34, 25, -50);
+        drawStrokeBox(shift+wall.width/2-17, 460, 34, 25, "white", 1);
         bctx.beginPath();
         var fontWidth = 15;
         bctx.font = "bold "+fontWidth+"pt Calibri";
@@ -381,8 +442,8 @@ function fieldPage() {
         var player = new Object();
         player.name = name;
         player.resources = [];
-        player.hp = 100;
-        player.wall = 100;
+        player.hp = 50;
+        player.wall = 25;
         return player;
     }   
        
@@ -757,6 +818,19 @@ function fieldPage() {
         }
     }
 
+    function doHeal() {
+        if (currentPlayer === player1) {
+            changeHp(player1, 10);
+            doDamage(player1, 25);
+            //changeWall(player2, 10);
+        } else {
+            changeHp(player2, 10);
+            doDamage(player2, 25);
+            //changeWall(player2, 10);
+        }
+        drawCanvas();
+    }
+
     function doPain() {
         if (currentPlayer === player1) {
             changeHp(player2, -10);
@@ -797,6 +871,21 @@ function fieldPage() {
         if (player.hp <= 0) {
             
             alert(player.name+" проиграл!");
+            clearElements();
+            background.draw = function () {
+                drawBox(0,0,sizeX,sizeY, "#DDDDDD");
+                bctx.beginPath();
+                bctx.font = "80pt Garamond";
+                bctx.textAlign = "center";
+                bctx.fillStyle = "magenta";
+                bctx.fillText("Конец.", sizeX/2, sizeY/2);
+                bctx.closePath();
+            }
+            //startGame();
+        }
+        if (player.hp >= maxhp) {
+            
+            alert(player.name+" выиграл!");
             clearElements();
             background.draw = function () {
                 drawBox(0,0,sizeX,sizeY, "#DDDDDD");
