@@ -14,7 +14,9 @@ function fieldPage() {
         drawTowerTop(100,100,100,50);
         drawTowerBottom(50,400,200,50);
         drawTowerCore(130,150,40,250);*/
-        
+        //var img = resource["fon"].image;
+        //bctx.drawImage(img, 0, 0);
+        drawPicture("fon", 0, 0);
     }
     
  
@@ -186,18 +188,32 @@ function fieldPage() {
     }
     
     function tower (number, shift, min, max) {
-
+        var player = player2;
+        if (number===1)
+            player = player1;
+        
         var top = resource["tower_top_player"+number].image;
         var core = resource["tower"].image;
         var dist = Math.min((/*2 +*/ max - min - top.height),core.height);
-        if (number===1)
+        /*if (number===1)
             dist = dist * player1.hp/maxhp;
         else
-            dist = dist * player2.hp/maxhp;
+            dist = dist * player2.hp/maxhp;*/
+        dist = dist * player.hp/maxhp;
         var disp = (top.width-core.width)/2;
         bctx.drawImage(top, shift, max-dist - top.height);
         bctx.drawImage(core, shift+disp, max-dist);
 
+        //drawBox(shift+disp+core.width/2-25, 450, 50, 30, "green")
+        drawLightening(shift+disp+core.width/2-18, 460, 36, 25, -50);
+        drawStrokeBox(shift+disp+core.width/2-18, 460, 36, 25, "white", 1);
+        bctx.beginPath();
+        var fontWidth = 15;
+        bctx.font = "bold "+fontWidth+"pt Calibri";
+        bctx.textAlign = "center";
+        bctx.fillStyle = "white";
+        bctx.fillText(player.hp, shift+disp+core.width/2, 460+25-fontWidth/2);
+        bctx.closePath();
     }
     
     function towers () {
@@ -221,19 +237,32 @@ function fieldPage() {
     }
 
     function wall (number, shift, min, max) {
-
+        var player = player2;
+        if (number===1)
+            player = player1;
+        
         var wall = resource["wall"].image;
 
         var dist = Math.min((2 + max - min), wall.height);
-        if (number===1)
-            dist = dist * player1.wall/maxwall;
-        else
-            dist = dist * player2.wall/maxwall;
+
+        dist = dist * player.wall/maxwall;
+
 
             //alert(dist)
         bctx.drawImage(wall, shift, max-dist);
         //drawBox(shift-100, max-Math.min((2 + max - min), wall.height)-5, 200, 5, "blue")
         //drawBox(shift-100, max, 200, 5, "blue")
+        
+        
+        drawLightening(shift+wall.width/2-18, 460, 36, 25, -50);
+        drawStrokeBox(shift+wall.width/2-18, 460, 36, 25, "white", 1);
+        bctx.beginPath();
+        var fontWidth = 15;
+        bctx.font = "bold "+fontWidth+"pt Calibri";
+        bctx.textAlign = "center";
+        bctx.fillStyle = "white";
+        bctx.fillText(player.wall, shift+wall.width/2, 460+25-fontWidth/2);
+        bctx.closePath();
     }
 
     function walls () {
@@ -362,7 +391,7 @@ function fieldPage() {
     //player1 = "Player 1";
     //player2 = "Player 2";
     
-    var player1 = player("Player ITHETESTER");//player("Player 1");
+    var player1 = player("Player "+currentName);//player("Player ITHETESTER");//player("Player 1");
    
    
     player1.resources["water"] = gameResource("water",500,1000);
@@ -763,12 +792,22 @@ function fieldPage() {
     
     function doDamage (player, change) {
         var tail = changeWall(player, change);
-        if (tail>0)
+        if (tail<0)
             changeHp (player, tail);
         if (player.hp <= 0) {
             
             alert(player.name+" проиграл!");
             clearElements();
+            background.draw = function () {
+                drawBox(0,0,sizeX,sizeY, "#DDDDDD");
+                bctx.beginPath();
+                bctx.font = "80pt Garamond";
+                bctx.textAlign = "center";
+                bctx.fillStyle = "magenta";
+                bctx.fillText("Конец.", sizeX/2, sizeY/2);
+                bctx.closePath();
+            }
+            //startGame();
         }
     }
 

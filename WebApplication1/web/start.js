@@ -43,7 +43,7 @@ function startPage() {
         if (cX>=x_from && cX<=x_to && cY>=y_from && cY<=y_to) {
             processed = true;
 //alert(0)
-            waitingPage();
+            selectorPage();
         }
     });
    

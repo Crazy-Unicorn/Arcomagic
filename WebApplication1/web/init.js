@@ -7,7 +7,7 @@ function xy_res (horizontal, res) {
     
 }*/
 
-horizontal = false;
+horizontal = true;
 
 function xy_res (res) {
     if (horizontal) {
@@ -104,7 +104,7 @@ var cpix = conte.data;
 
                 co0 = j*sizeX;
                 co1 = (co0+i)*4;
-                co2 = (co0+(sizeX-1-i))*4;
+                //co2 = (co0+(sizeX-1-i))*4;
                 co3 = ((sizeX-1-i)*sizeY+j)*4;
 
                 //rotatedPixels[co3] = 100;//100;//pixels[co1];//co1*250/l;//pixels[co1];
@@ -256,6 +256,14 @@ function init_resources () {
         "image" : null,
         "src" : "res/res_water.PNG"
     };
+    resource["fire_mage"] = {
+        "image" : null,
+        "src" : "res/fire_mage.jpeg"
+    };
+    resource["fon"] = {
+        "image" : null,
+        "src" : "res/1092.jpg"
+    };
     for (var key in resource) {
         resource[key].image = new Image();
         resource[key].image.src = resource[key].src;
@@ -404,7 +412,7 @@ function touchHandler(event) {
     event.preventDefault();
 }
 
-function createObjectElement (draw, events, x, y, width, height) {
+function createObjectElement (draw, events, x, y, width, height, name) {
 
     var el = new Object();
     el.type = "object";
@@ -415,6 +423,7 @@ function createObjectElement (draw, events, x, y, width, height) {
     el.draw = draw;
     el.oldDraw = draw;
     el.waiting = false;
+    el.name = name;
     
     el.restore = function() {
         this.x = this.initX;
@@ -519,11 +528,40 @@ function drawBox(x,y,width,height,color) {
         bctx.closePath();
 }
 
-function drawStrokeBox(x,y,width,height,color) {
-            bctx.beginPath();
-            bctx.strokeStyle = color; 
-            bctx.strokeRect(x, y, width, height);
-            bctx.closePath();
+function drawStrokeBox(x,y,width,height,color,lineWidth) {
+    bctx.beginPath();
+    bctx.strokeStyle = color;
+    var oldLW = bctx.lineWidth;
+    bctx.lineWidth = lineWidth;
+    bctx.strokeRect(x, y, width, height);
+    bctx.lineWidth = oldLW;
+    bctx.closePath();
+}
+
+function drawLightening(x,y,width,height,level) {
+
+    var bc = bctx.getImageData(x, y, width, height);
+    var pixels = bc.data;
+
+    var l = pixels.length;
+
+    for (var i = 0; i < l; i+=4) {
+            
+            pixels[i] = pixels[i]+level;
+            pixels[i+1] = pixels[i+1]+level;
+            pixels[i+2] = pixels[i+2]+level;
+            pixels[i+3] = pixels[i+3]-level;
+
+        }
+
+    bctx.putImageData(bc, x, y);
+}
+
+function drawPicture (picName, x, y) {
+    if (resource[picName] && resource[picName].image.width !== 0) {
+        var img = resource[picName].image;
+        bctx.drawImage(img, x, y);
+    }
 }
 
 /*

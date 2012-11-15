@@ -15,7 +15,7 @@ function waitingPage() {
         bctx.textAlign = "center";
         bctx.fillStyle = "white";
         //bctx.fillText("Waiting...", relSizeX()/2, relSizeY()/2);
-bctx.fillText("Waiting...", sizeX()/2, sizeY()/2);
+bctx.fillText("Waiting...", sizeX/2, sizeY/2);
         bctx.closePath();
     }, null));
 
