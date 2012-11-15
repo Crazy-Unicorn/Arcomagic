@@ -26,8 +26,17 @@ function startPage() {
     evs["mousedown"]=createEvent("mousedown", function (evt) {
         var cX = evt.clientX-canvasOffset.left;
         var cY = evt.clientY-canvasOffset.top;
-        var dir_from = xy(sizeX/2-200, sizeY/2-100);
-        var dir_to = xy(sizeX/2+200, sizeY/2+100);
+        //alert(evt.screenY + " "+evt.clientY)
+        //var html = document.documentElement;
+	//var body = document.body;
+	//var scrollTop = html.scrollTop || body && body.scrollTop || 0;
+        //alert("Текущая прокрутка: " + scrollTop);
+        cY+=getPageScroll().top; //getScrollTop();//scrollTop;
+        cX+=getPageScroll().left;
+        var ddd = xy(cX, cY);
+        
+        /*var dir_from = xy(sizeX/2-300, sizeY/2-100);
+        var dir_to = xy(sizeX/2+100, sizeY/2+100);*/
         
 //alert(sizeX/2-200)
 //alert(cX+" "+cY+" "+dir_from.x+" "+dir_to.x+" "+dir_from.y+" "+dir_to.y)
@@ -36,11 +45,21 @@ function startPage() {
         var x_to = x_from + 400;
         var y_from = relSizeY()/2-100;
         var y_to = y_from + 200; */
-        var x_from = dir_from.x;
+        /*var x_from = dir_from.x;
         var x_to = dir_to.x;
         var y_from = dir_from.y;
-        var y_to = dir_to.y;
-        if (cX>=x_from && cX<=x_to && cY>=y_from && cY<=y_to) {
+        var y_to = dir_to.y;*/
+
+
+        var x_from = sizeX/2-200;
+        var x_to = sizeX/2+200;
+        var y_from = sizeY/2-100;
+        var y_to = sizeY/2+200;
+        
+        var ccX = ddd.x;
+        var ccY = ddd.y;
+        //alert(ccX+" "+ccY+" "+x_from+" "+x_to+" "+y_from+" "+y_to)
+        if (ccX>=x_from && ccX<=x_to && ccY>=y_from && ccY<=y_to) {
             processed = true;
 //alert(0)
             selectorPage();
@@ -60,8 +79,9 @@ function startPage() {
 
     addElement(createObjectElement(function () {
         var img = resource["tbomm_title"].image;
-        var co = xy(sizeX/2-img.width/2, 30);
-        bctx.drawImage(img, co.x, co.y);
+        /*var co = xy(sizeX/2-img.width/2, 30);
+        bctx.drawImage(img, co.x, co.y);*/
+        bctx.drawImage(img, sizeX/2-img.width/2, 30);
     }, null));
     
     drawCanvas();

@@ -7,7 +7,10 @@ function xy_res (horizontal, res) {
     
 }*/
 
-horizontal = true;
+horizontal = false;
+
+sizeX = 1280;
+sizeY = 720;
 
 function xy_res (res) {
     if (horizontal) {
@@ -21,7 +24,7 @@ function xy (x, y) {
     if (horizontal) {
         return {"x":x, "y":y}}
     else {
-	return {"x":y, "y":x}}
+	return {"x":sizeX-y, "y":x}}
         //return {"x":y, "y":sizeX-x}}
     
 }
@@ -286,8 +289,8 @@ function startGame() {
 
     //horizontal = false;
 
-    sizeX = 1280;//300;//1280;
-    sizeY = 720;//480;//720;
+    //sizeX = 1280;//300;//1280;
+    //sizeY = 720;//480;//720;
 
     canvas = document.getElementById("game");
     canvas.width = relSizeX();
@@ -319,12 +322,12 @@ function startGame() {
         //startPage();
         bctx.beginPath();
         bctx.fillStyle = "black"; 
-        bctx.rect(0, 0, relSizeX(), relSizeY());
+        bctx.rect(0, 0, sizeX, sizeY);
         bctx.fill();
         bctx.font = "40pt Calibri";
         bctx.textAlign = "center";
         bctx.fillStyle = "#222222";
-        bctx.fillText("Loading...", relSizeX()/2, relSizeY()/2);
+        bctx.fillText("Loading...", sizeX/2, sizeY/2);
         bctx.closePath();
         
         onScreen();
@@ -562,6 +565,34 @@ function drawPicture (picName, x, y) {
         var img = resource[picName].image;
         bctx.drawImage(img, x, y);
     }
+}
+
+/*function getScrollTop () {
+    var html = document.documentElement;
+    var body = document.body;
+    var scrollTop = html.scrollTop || body && body.scrollTop || 0;
+        //alert("Текущая прокрутка: " + scrollTop);
+    return scrollTop;
+}*/
+
+function getPageScroll() {
+  if (window.pageXOffset != undefined) {
+    return {
+      left: pageXOffset,
+      top: pageYOffset
+    };
+  }
+
+  var html = document.documentElement;
+  var body = document.body;
+
+  var top = html.scrollTop || body && body.scrollTop || 0;
+  top -= html.clientTop;
+
+  var left = html.scrollLeft || body && body.scrollLeft || 0;
+  left -= html.clientLeft;
+
+  return { top: top, left: left };
 }
 
 /*

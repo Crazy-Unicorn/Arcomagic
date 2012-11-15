@@ -42,12 +42,31 @@ function keyboardPage() {
             this.events[type].process = function (evt) {
                 var cX = evt.clientX-canvasOffset.left;
                 var cY = evt.clientY-canvasOffset.top;
+                
+                /*var dir_from = xy(this.el.x, this.el.y);
+                var dir_to = xy(this.el.x+this.el.width, this.el.y+this.el.height);
+                
+                var x_from = dir_from.x;
+                var x_to = dir_to.x;
+                var y_from = dir_from.y;
+                var y_to = dir_to.y;
+                //alert(cX + ' ' + cY + ' ' + x_from + ' ' + x_to + ' ' + y_from + ' ' + y_to)
+                if (cX>=x_from && cX<=x_to && cY>=y_from && cY<=y_to) {
+                    this.el.events[evt.type].processEvent();
+                }*/
+                
+                //cY+=getScrollTop();
+                cY+=getPageScroll().top;
+                cX+=getPageScroll().left;
+        
+                var dd = xy(cX, cY);
                 var x_from = this.el.x;
                 var x_to = this.el.x+this.el.width;
                 var y_from = this.el.y;
                 var y_to = this.el.y+this.el.height;
-                //alert(cX + ' ' + cY + ' ' + x_from + ' ' + x_to + ' ' + y_from + ' ' + y_to)
-                if (cX>=x_from && cX<=x_to && cY>=y_from && cY<=y_to) {
+                var dX = dd.x;
+                var dY = dd.y;
+                if (dX>=x_from && dX<=x_to && dY>=y_from && dY<=y_to) {
                     this.el.events[evt.type].processEvent();
                 }
             };

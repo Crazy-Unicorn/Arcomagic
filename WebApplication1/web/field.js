@@ -9,7 +9,7 @@ var shiftbackdirectiondown = 2;
 
 
     background.draw = function () {
-        drawBox(0,0,relSizeX(),relSizeY(),"#DDDDDD");
+        drawBox(0,0,sizeX,sizeY,"#DDDDDD");
         /*drawBox(relSizeX()/2-500, relSizeY()/2+75, 150, 200,"brown");
         drawBox(relSizeX()/2-330, relSizeY()/2+75, 150, 200,"brown");
         drawBox(relSizeX()/2-160, relSizeY()/2+75, 150, 200,"brown");
@@ -62,16 +62,26 @@ var shiftbackdirectiondown = 2;
      var cardMouseDown = function (evt) {
         var cX = evt.clientX-canvasOffset.left;
         var cY = evt.clientY-canvasOffset.top;
-        var x_from = this.el.x;
+        /*var x_from = this.el.x;
         var x_to = this.el.x+this.el.width;
         var y_from = this.el.y;
         var y_to = this.el.y+this.el.height;   
         //alert(cX+" "+cY+" "+x_from+" "+x_to+" "+y_from+" "+y_to);
-        if (cX>=x_from && cX<=x_to && cY>=y_from && cY<=y_to) {
+        if (cX>=x_from && cX<=x_to && cY>=y_from && cY<=y_to) {*/
+        cY+=getPageScroll().top;
+        cX+=getPageScroll().left;
+        var dd = xy(cX, cY);
+        var x_from = this.el.x;
+        var x_to = this.el.x+this.el.width;
+        var y_from = this.el.y;
+        var y_to = this.el.y+this.el.height;
+        var dX = dd.x;
+        var dY = dd.y;
+        if (dX>=x_from && dX<=x_to && dY>=y_from && dY<=y_to) {
             //alert('found')
             tracker.id = this.el.id;
-            tracker.x = cX;
-            tracker.y = cY;
+            tracker.x = dX;
+            tracker.y = dY;
             this.el.draw = function () {
                 drawBox(this.x-5, this.y-5, this.width+10, this.height+10,"#f2de29");
                 drawBox(this.x, this.y, this.width, this.height,this.color);
@@ -116,19 +126,19 @@ var shiftbackdirectiondown = 2;
     }
     
     var cardMouseMove = function (evt) {
-        var cX = evt.clientX-canvasOffset.left;
+        //var cX = evt.clientX-canvasOffset.left;
         var cY = evt.clientY-canvasOffset.top;
-        var x_from = this.el.x;
-        var x_to = this.el.x+this.el.width;
-        var y_from = this.el.y;
-        var y_to = this.el.y+this.el.height;   
+        cY+=getPageScroll().top;
+        var cX = evt.clientX-canvasOffset.left;
+        cX+=getPageScroll().left;
+        var dY = xy(cX, cY).y;
         //alert(this.el.x);
         if (tracker.id===this.el.id) {
             //alert(tracker.y+" "+cY);
             //if ((y_to - (tracker.y-cY))<=sizeY) {
-                if ((this.el.y-(tracker.y-cY)) >= 0) {
-                    this.el.y -= (tracker.y-cY);
-                    tracker.y = cY;
+                if ((this.el.y-(tracker.y-dY)) >= 0) {
+                    this.el.y -= (tracker.y-dY);
+                    tracker.y = dY;
                     drawCanvas(); 
                 } else {
                     this.el.y = 0;
@@ -151,7 +161,7 @@ var shiftbackdirectiondown = 2;
                     bctx.font = "60pt Garamond";
                     bctx.textAlign = "center";
                     bctx.fillStyle = "red";
-                    bctx.fillText("Выбрал", relSizeX()/2, relSizeY()/3);
+                    bctx.fillText("Выбрал", sizeX/2, sizeY/3);
                     doPain();
                     doGain();
                     changeCurrentPlayer();
@@ -183,7 +193,7 @@ var shiftbackdirectiondown = 2;
                     bctx.font = "60pt Garamond";
                     bctx.textAlign = "center";
                     bctx.fillStyle = "red";
-                    bctx.fillText("Скинул", relSizeX()/2, relSizeY()/3);
+                    bctx.fillText("Скинул", sizeX/2, sizeY/3);
                     bctx.closePath();
                     
                     doHeal();
@@ -362,11 +372,11 @@ var shiftbackdirectiondown = 2;
     addElement(createObjectElement(drawBottom));
     addElement(createObjectElement(drawBorder));
     
-    var cardY = relSizeY()/2+145;
+    var cardY = sizeY/2+145;
     
     addElement(createObjectElement(function() {
         colorCard("yellow", this);
-    }, null, relSizeX()/2-500, cardY, 150, 200)
+    }, null, sizeX/2-500, cardY, 150, 200)
     .addEvent("mousedown", cardMouseDown)
     .addEvent("mouseup", cardMouseUp)
     .addEvent("mousemove", cardMouseMove)
@@ -374,7 +384,7 @@ var shiftbackdirectiondown = 2;
     
     addElement(createObjectElement(function () {
         colorCard("magenta", this);
-    }, null, relSizeX()/2-330, cardY, 150, 200)
+    }, null, sizeX/2-330, cardY, 150, 200)
         .addEvent("mousedown", cardMouseDown)
         .addEvent("mouseup", cardMouseUp)
         .addEvent("mousemove", cardMouseMove)
@@ -383,7 +393,7 @@ var shiftbackdirectiondown = 2;
 
     addElement(createObjectElement(function () {
         colorCard("cyan", this);
-    }, null, relSizeX()/2-160, cardY, 150, 200)
+    }, null, sizeX/2-160, cardY, 150, 200)
         .addEvent("mousedown", cardMouseDown)
         .addEvent("mouseup", cardMouseUp)
         .addEvent("mousemove", cardMouseMove)
@@ -392,7 +402,7 @@ var shiftbackdirectiondown = 2;
 
     addElement(createObjectElement(function () {
         colorCard("grey", this);
-    }, null, relSizeX()/2+10, cardY, 150, 200)
+    }, null, sizeX/2+10, cardY, 150, 200)
         .addEvent("mousedown", cardMouseDown)
         .addEvent("mouseup", cardMouseUp)
         .addEvent("mousemove", cardMouseMove)
@@ -402,7 +412,7 @@ var shiftbackdirectiondown = 2;
 
     addElement(createObjectElement(function () {
         colorCard("blue", this);
-    }, null, relSizeX()/2+180, cardY, 150, 200)
+    }, null, sizeX/2+180, cardY, 150, 200)
         .addEvent("mousedown", cardMouseDown)
         .addEvent("mouseup", cardMouseUp)
         .addEvent("mousemove", cardMouseMove)
@@ -411,7 +421,7 @@ var shiftbackdirectiondown = 2;
 
    addElement(createObjectElement(function () {
        colorCard("black", this);
-    }, null, relSizeX()/2+350, cardY, 150, 200)
+    }, null, sizeX/2+350, cardY, 150, 200)
         .addEvent("mousedown", cardMouseDown)
         .addEvent("mouseup", cardMouseUp)
         .addEvent("mousemove", cardMouseMove)
@@ -616,7 +626,7 @@ var shiftbackdirectiondown = 2;
 
         height=0;
         for (var res in player2.resources) {
-            drawResourc(player2.resources[res].name, relSizeX()-20-150, 80+height, player2.resources[res].production, player2.resources[res].amount);
+            drawResourc(player2.resources[res].name, sizeX-20-150, 80+height, player2.resources[res].production, player2.resources[res].amount);
             height+=46;
             /*if (player2.resources[res].img) {
                 if (res != 'skull') {
@@ -708,7 +718,7 @@ var shiftbackdirectiondown = 2;
         }
         
         
-    }, null, relSizeX()-20-200, 10, 150, 30)  );
+    }, null, sizeX-20-200, 10, 150, 30)  );
     
     
     function drawTowerTop(x, y, width, height) {
