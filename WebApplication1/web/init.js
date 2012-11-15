@@ -1,11 +1,3 @@
-/*!
-function xy_res (horizontal, res) {
-    if (horizontal) {
-        return {"x":res["x"], "y":res["y"]}}
-    else {
-        return {"x":res["y"], "y":res["x"]}}
-    
-}*/
 
 horizontal = false;
 
@@ -38,18 +30,6 @@ function relSizeY () {
     if (horizontal) {return sizeY;}
     else {return sizeX;}
 }
-
-/*function xy_x (horizontal, x, y) {
-    if (horizontal) { return x; }
-    else { return y; }
-    
-}
-
-function xy_y (horizontal, x, y) {
-    if (horizontal) { return y; }
-    else { return x; }
-    
-}*/
 
 drawing = false;
 
@@ -87,68 +67,27 @@ var cpix = conte.data;
         var co1 = 0;
         var co2 = 0;
         var co3 = 0;
-        
-        //var arrayToCopy = [ 1, 2, 3, 4, 5 ];
 
-        //var copyOfArray = [].concat(arrayToCopy);
-        
-        //alert(pixels)
-        
-        //var oldPixels = pixels.concat();
-        //alert(oldPixels.length)
         var l = pixels.length;
-        //alert(l)
+
         for (j = 0; j < sizeY; j++) {
             for (i = 0; i < sizeX; i++) {
-                /*rotatedPixels[((sizeX-1-i)*sizeY+j)*4] = pixels[(j*sizeX+i)*4];
-                rotatedPixels[((sizeX-1-i)*sizeY+j)*4+1] = pixels[(j*sizeX+i)*4+1];
-                rotatedPixels[((sizeX-1-i)*sizeY+j)*4+2] = pixels[(j*sizeX+i)*4+2];
-                rotatedPixels[((sizeX-1-i)*sizeY+j)*4+3] = pixels[(j*sizeX+i)*4+3];*/
+
 
                 co0 = j*sizeX;
                 co1 = (co0+i)*4;
                 //co2 = (co0+(sizeX-1-i))*4;
                 co3 = ((sizeX-1-i)*sizeY+j)*4;
 
-                //rotatedPixels[co3] = 100;//100;//pixels[co1];//co1*250/l;//pixels[co1];
-                //rotatedPixels[co3+1] = 100;//200;//pixels[co1+1];//co1*250/l;//pixels[co1+1];
-                //rotatedPixels[co3+2] = 100;//0;//pixels[co1+2];//co1*250/l;//pixels[co1+2];
-                //rotatedPixels[co3+3] = pixels[co1+3];//200;//pixels[co1+3];//co1*250/l;//pixels[co1+3];
-                //if (co3<0 || co3 > l)
-                //    alert('err')
-                //pixels[co1] = 100;
-                //pixels[co1+1] = 0;
-                //pixels[co1+2] = 200;
-                //pixels[co1+3] = 200;
-                //pixels = rotatedPixels;
-
-	cpix[co3] = pixels[co1];
+                cpix[co3] = pixels[co1];
                 cpix[co3+1] = pixels[co1+1];
                 cpix[co3+2] = pixels[co1+2];
                 cpix[co3+3] = pixels[co1+3];
 
             }
         }
-        
-        
-        //for (var k = 0; k < pixels.length; k++) 
-            //pixels[k] = rotatedPixels[k];
-        /*for (j = 0; j < sizeY; j++) {
-            for (i = 0; i < sizeX; i++) {
-                co0 = j*sizeX;
-                co1 = (co0+i)*4;
-                co2 = (co0+(sizeX-1-i))*4;
-                co3 = ((sizeX-1-i)*sizeY+j)*4;
-                pixels[co1] = rotatedPixels[co1];
-                pixels[co1+1] = rotatedPixels[co1+1];
-                pixels[co1+2] = rotatedPixels[co1+2];
-                pixels[co1+3] = rotatedPixels[co1+3];
-            }
-        }*/
-        //pixels = rotatedPixels;
-        //ctx.putImageData(bc, 000, 000);
-ctx.putImageData(conte, 000, 000);
-        //alert(1)
+        ctx.putImageData(conte, 000, 000);
+
     }
 }
 
@@ -319,7 +258,6 @@ function startGame() {
         background = new Object();
         elements = [];
         
-        //startPage();
         bctx.beginPath();
         bctx.fillStyle = "black"; 
         bctx.rect(0, 0, sizeX, sizeY);
@@ -358,22 +296,11 @@ function init_events () {
 function mouseHandler (event) {
     
     //alert("mouse "+event.type);
-    /*var len = events.length;
 
-    processed = false;
-    for (var i = len-1; i>=0; i--) {
-        if (events[i].type === event.type) {
-            events[i].process(event);
-        }
-        if (processed === true) {
-            return;
-        }
-    }*/
     processed = false;
     var elLen = elements.length;
     for (var i = elLen-1; i>=0; i--) {
         if (elements[i].events) {
-            //var evLen = elements[i].events.length;
             for (var j in elements[i].events) {
                 if (elements[i].events[j].type === event.type) {
                     elements[i].events[j].process(event);
@@ -446,21 +373,7 @@ function createObjectElement (draw, events, x, y, width, height, name) {
             this.events = new Object();
         var ev = new Object();
         ev.type = type;
-        ev.process = process;/*function (evt) {
-        //alert("#");
-        var cX = evt.clientX-canvasOffset.left;
-        var cY = evt.clientY-canvasOffset.top;
-        var x_from = el.x;
-        var x_to = el.x+el.width;
-        var y_from = el.y;
-        var y_to = el.y+el.height;   
-        
-        if (cX>=x_from && cX<=x_to && cY>=y_from && cY<=y_to) {
-            alert(this.type);
-            el.y-=10;
-            drawCanvas();
-        }
-    };*///process;
+        ev.process = process;
         ev.el = this;
         this.events[type]=ev;
         return this;
@@ -566,14 +479,6 @@ function drawPicture (picName, x, y) {
         bctx.drawImage(img, x, y);
     }
 }
-
-/*function getScrollTop () {
-    var html = document.documentElement;
-    var body = document.body;
-    var scrollTop = html.scrollTop || body && body.scrollTop || 0;
-        //alert("Текущая прокрутка: " + scrollTop);
-    return scrollTop;
-}*/
 
 function getPageScroll() {
   if (window.pageXOffset != undefined) {
@@ -1108,7 +1013,7 @@ function whatControlBox2(evt) {
 * /
 */
 
-/* copied */
+/* copied from web */
 
 function rgbToHex(r, g, b){
     if (r > 255 || g > 255 || b > 255)

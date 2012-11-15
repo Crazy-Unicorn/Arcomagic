@@ -24,15 +24,7 @@ function selectorPage() {
             return;
         var cX = evt.clientX-canvasOffset.left;
         var cY = evt.clientY-canvasOffset.top;
-        
-        /*var dir_from = xy(this.el.x, this.el.y);
-        var dir_to = xy(this.el.x+this.el.width, this.el.y+this.el.height);
-        var x_from = dir_from.x;
-        var x_to = dir_to.x;
-        var y_from = dir_from.y;
-        var y_to = dir_to.y;*/
-        
-        //cY+=getScrollTop();
+
         cY+=getPageScroll().top;
         cX+=getPageScroll().left;
         var dd = xy(cX, cY);
@@ -47,14 +39,11 @@ function selectorPage() {
         
         //alert(cX + ' ' + cY + ' ' + x_from + ' ' + x_to + ' ' + y_from + ' ' + y_to)
         if (dX>=x_from && dX<=x_to && dY>=y_from && dY<=y_to) {
-            //alert('fire')
             currentMage = this.el.name;
             var i = 0;
             var el = this.el;
             var forward = true;
             var tid = setInterval(function() {
-                //alert(el.x)
-                //var c = ""+i;
                 var color = rgbToHex(i, i, i)
                 drawBox(el.x, el.y, el.width, el.height, "#"+color);
                 drawStrokeBox(el.x, el.y, el.width, el.height, "grey");
@@ -64,18 +53,14 @@ function selectorPage() {
                 if (forward) {
                     i+=32;
                     if (i>230) {
-                        //clearInterval(tid);
                         forward = false;
                     }                    
                 }
                 if (!forward) {
                     i-=32;
                     if (i<0) {
-                        //onScreen();
                         keyboardPage();
                         clearInterval(tid);
-                        
-                        //forward = false;
                     }  
                 }
 

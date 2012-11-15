@@ -2,27 +2,15 @@ function fieldPage() {
 
     clearElements();
 
-var shiftbackright = 0;
-var shiftbackdirectionright = 1;
-var shiftbackdown = 0;
-var shiftbackdirectiondown = 2;
+    var shiftbackright = 0;
+    var shiftbackdirectionright = 1;
+    var shiftbackdown = 0;
+    var shiftbackdirectiondown = 2;
 
 
     background.draw = function () {
         drawBox(0,0,sizeX,sizeY,"#DDDDDD");
-        /*drawBox(relSizeX()/2-500, relSizeY()/2+75, 150, 200,"brown");
-        drawBox(relSizeX()/2-330, relSizeY()/2+75, 150, 200,"brown");
-        drawBox(relSizeX()/2-160, relSizeY()/2+75, 150, 200,"brown");
-        drawBox(relSizeX()/2+10, relSizeY()/2+75, 150, 200,"brown");
-        drawBox(relSizeX()/2+180, relSizeY()/2+75, 150, 200,"brown");
-        drawBox(relSizeX()/2+350, relSizeY()/2+75, 150, 200,"brown");
-        drawResources();
-        drawTowerTop(100,100,100,50);
-        drawTowerBottom(50,400,200,50);
-        drawTowerCore(130,150,40,250);*/
-        //var img = resource["fon"].image;
-        //bctx.drawImage(img, 0, 0);
-        //shiftback--;
+
         if (shiftbackdirectionright===1)
             shiftbackright-=2;
         else
@@ -54,7 +42,6 @@ var shiftbackdirectiondown = 2;
             shiftbackdirectiondown = 2;
         }
         drawPicture("fon", shiftbackright, shiftbackdown);
-        //drawPicture("fon", shiftback--, 0);
     }
     
  
@@ -62,12 +49,6 @@ var shiftbackdirectiondown = 2;
      var cardMouseDown = function (evt) {
         var cX = evt.clientX-canvasOffset.left;
         var cY = evt.clientY-canvasOffset.top;
-        /*var x_from = this.el.x;
-        var x_to = this.el.x+this.el.width;
-        var y_from = this.el.y;
-        var y_to = this.el.y+this.el.height;   
-        //alert(cX+" "+cY+" "+x_from+" "+x_to+" "+y_from+" "+y_to);
-        if (cX>=x_from && cX<=x_to && cY>=y_from && cY<=y_to) {*/
         cY+=getPageScroll().top;
         cX+=getPageScroll().left;
         var dd = xy(cX, cY);
@@ -87,14 +68,9 @@ var shiftbackdirectiondown = 2;
                 drawBox(this.x, this.y, this.width, this.height,this.color);
             }
              
-            /*this.el.draw = function () {
-                drawBox(this.x-5, this.y-5, this.width+10, this.height+10,"#f2de29");
-                drawBox(this.x, this.y, this.width, this.height,this.color);*/
-             
             drawCanvas();
             processed = true;
         }
-        ///alert(cX + " " + cY);//!@#
     }
 
     var cardMouseUp = function (evt) {
@@ -104,9 +80,7 @@ var shiftbackdirectiondown = 2;
                 this.el.restore();
                 this.el.draw = this.el.oldDraw;
                 drawCanvas();
-                //alert(this.el.oldDraw)
             }
-            //drawCanvas();
             tracker.id = null;
             processed = true;
         }
@@ -119,22 +93,20 @@ var shiftbackdirectiondown = 2;
                 this.el.draw = this.el.oldDraw;    
                 drawCanvas();
             }
-            //drawCanvas();
             tracker.id = null;
             processed = true;
         }
     }
     
     var cardMouseMove = function (evt) {
-        //var cX = evt.clientX-canvasOffset.left;
         var cY = evt.clientY-canvasOffset.top;
         cY+=getPageScroll().top;
         var cX = evt.clientX-canvasOffset.left;
         cX+=getPageScroll().left;
         var dY = xy(cX, cY).y;
-        //alert(this.el.x);
+
         if (tracker.id===this.el.id) {
-            //alert(tracker.y+" "+cY);
+
             //if ((y_to - (tracker.y-cY))<=sizeY) {
                 if ((this.el.y-(tracker.y-dY)) >= 0) {
                     this.el.y -= (tracker.y-dY);
@@ -147,13 +119,11 @@ var shiftbackdirectiondown = 2;
                 if (this.el.y <= (this.el.initY-this.el.height-10)) {
                     this.el.y = this.el.initY-this.el.height-10;
                     //alert("вынул");
-                    //drawCanvas();
                     this.el.draw = function () {
                         drawBox(this.x-5, this.y-5, this.width+10, this.height+10, "red");
                         drawBox(this.x, this.y, this.width, this.height, this.color);
                     }
             
-                    ///drawCanvas(); 
                     this.el.waiting=true;
                     this.el.events["mouseup"].process(evt);
                     
@@ -230,9 +200,7 @@ var shiftbackdirectiondown = 2;
         card.color = color;
     }
     
-    function tower1 (shift, min, max) { //190, 70   до 350
-        //var min = 5; //70;
-        //var max = 420; //350;
+    function tower1 (shift, min, max) {
 
         var top = resource["tower_top_player1"].image;
         var core = resource["tower"].image;
@@ -240,13 +208,10 @@ var shiftbackdirectiondown = 2;
         var disp = (top.width-core.width)/2;
         bctx.drawImage(top, shift, max-dist - top.height);
         bctx.drawImage(core, shift+disp, max-dist);
-        //drawBox(150, min-5, 200, 5, "blue");
-        //drawBox(150, max, 200, 5, "blue");
+
     }
 
     function tower2 (shift, min, max) { //190, 70   до 350
-        //var min = 5;
-        //var max = 420;
 
         var top = resource["tower_top_player2"].image;
         var core = resource["tower"].image;
@@ -254,8 +219,7 @@ var shiftbackdirectiondown = 2;
         var disp = (top.width-core.width)/2;
         bctx.drawImage(top, shift, max-dist - top.height);
         bctx.drawImage(core, shift+disp, max-dist);
-        //drawBox(750, min-5, 200, 5, "blue");
-        //drawBox(750, max, 200, 5, "blue");
+
     }
     
     function tower (number, shift, min, max) {
@@ -266,16 +230,11 @@ var shiftbackdirectiondown = 2;
         var top = resource["tower_top_player"+number].image;
         var core = resource["tower"].image;
         var dist = Math.min((/*2 +*/ max - min - top.height),core.height);
-        /*if (number===1)
-            dist = dist * player1.hp/maxhp;
-        else
-            dist = dist * player2.hp/maxhp;*/
         dist = dist * player.hp/maxhp;
         var disp = (top.width-core.width)/2;
         bctx.drawImage(top, shift, max-dist - top.height);
         bctx.drawImage(core, shift+disp, max-dist);
 
-        //drawBox(shift+disp+core.width/2-25, 450, 50, 30, "green")
         drawLightening(shift+disp+core.width/2-17, 460, 34, 25, -50);
         drawStrokeBox(shift+disp+core.width/2-17, 460, 34, 25, "white", 1);
         bctx.beginPath();
@@ -318,8 +277,6 @@ var shiftbackdirectiondown = 2;
 
         dist = dist * player.wall/maxwall;
 
-
-            //alert(dist)
         bctx.drawImage(wall, shift, max-dist);
         //drawBox(shift-100, max-Math.min((2 + max - min), wall.height)-5, 200, 5, "blue")
         //drawBox(shift-100, max, 200, 5, "blue")
@@ -343,14 +300,6 @@ var shiftbackdirectiondown = 2;
         wall(1, 340, min, max);
         wall(2, 810, min, max);
     }
-
-    /*function resources1 () {
-        
-    }
-    
-    function resources2 () {
-        
-    }*/
 
     /*function resources (number, x) {
 
@@ -380,7 +329,7 @@ var shiftbackdirectiondown = 2;
     .addEvent("mousedown", cardMouseDown)
     .addEvent("mouseup", cardMouseUp)
     .addEvent("mousemove", cardMouseMove)
-    .addEvent("mouseleave", cardMouseLeave));//.addEvent("mousedown", process));
+    .addEvent("mouseleave", cardMouseLeave));
     
     addElement(createObjectElement(function () {
         colorCard("magenta", this);
@@ -476,8 +425,6 @@ var shiftbackdirectiondown = 2;
     
     player2.resources["bricks"] = gameResource("bricks",2,5);
     player2.resources["skull"] = gameResource("skull",2,5);
-    //player2.resources["gems"] = resource("gems",2,5);
-    //player2.resources["recruits"] = resource("recruits",2,5);
     
     var currentPlayer = player1;
     
@@ -512,13 +459,9 @@ var shiftbackdirectiondown = 2;
         var width = 100;
         var height = 100;
         drawBox(x, y, width, height, color1);
-        //var r = 6;
-        //drawStrokeBox(x+r, y+r, width-r*2, height-r*2, "grey");
-        //r = 7;
-        //drawStrokeBox(x+r, y+r, width-r*2, height-r*2, "grey");
-        var r = 5;//5
+        var r = 5;
         drawBox(x+r, y+r, width-r*2, height-r*2, color2);
-        r = 12;//8
+        r = 12;
         drawBox(x+r, y+r, width-r*2, height-r*2, color3);
 
         try {
@@ -611,36 +554,15 @@ var shiftbackdirectiondown = 2;
 
         var height=40;
         for (var res in player1.resources) {
-            //drawResource(player1.resources[res].name, 20, 80+height, player1.resources[res].production, player1.resources[res].amount);
-            //height+=107;
             
             drawResourc(player1.resources[res].name, 20, 80+height, player1.resources[res].production, player1.resources[res].amount);
             height+=46;
-            
-            /*if (player1.resources[res].img) {
-                bctx.drawImage(player1.resources[res].img, 20, 70+height);
-                height+=player1.resources[res].img.height;
-                i++;
-            }*/
         }
 
         height=0;
         for (var res in player2.resources) {
             drawResourc(player2.resources[res].name, sizeX-20-150, 80+height, player2.resources[res].production, player2.resources[res].amount);
             height+=46;
-            /*if (player2.resources[res].img) {
-                if (res != 'skull') {
-                    bctx.drawImage(player2.resources[res].img, relSizeX()-20-player2.resources[res].img.width, 70+height);
-                    height+=player2.resources[res].img.height;
-                    i++;
-                } else {
-                    drawBox(relSizeX()-20-120, 70+height, 120, 100, "#c0c0c0");
-                    bctx.drawImage(player2.resources[res].img, relSizeX()-20-60-player2.resources[res].img.width/2, 70+height+50-player2.resources[res].img.height/2);
-                    height+=100;
-                    i++;
-                }
-                    
-            }*/
         }
         //drawResource("life", 20, 80, 55, 250);
     }
@@ -670,7 +592,7 @@ var shiftbackdirectiondown = 2;
         drawBox(this.x+r, this.y+r, this.width-r*2, this.height-r*2, "black");
         
                     bctx.beginPath();
-                    bctx.font = "15pt Arial";//"20pt Arial";
+                    bctx.font = "15pt Arial";
                     bctx.textAlign = "center";
                     bctx.fillStyle = "white";
                     bctx.fillText(player1.name, this.x+this.width/2, this.y+this.height/2+7);
@@ -681,7 +603,7 @@ var shiftbackdirectiondown = 2;
             drawBox(this.x+this.width+10, this.y+5, this.width/2, this.height-10, "black");
 
                         bctx.beginPath();
-                        bctx.font = "10pt Arial";//"15pt Arial";
+                        bctx.font = "10pt Arial";
                         bctx.textAlign = "center";
                         bctx.fillStyle = "white";
                         bctx.fillText("Ходит", this.x+this.width+10+this.width/4, this.y+5+(this.height-10)/2+5);
@@ -700,7 +622,7 @@ var shiftbackdirectiondown = 2;
         drawBox(this.x+r, this.y+r, this.width-r*2, this.height-r*2, "black");
         
                     bctx.beginPath();
-                    bctx.font = "15pt Arial";//"20pt Arial";
+                    bctx.font = "15pt Arial";
                     bctx.textAlign = "center";
                     bctx.fillStyle = "white";
                     bctx.fillText(player2.name, this.x+this.width/2, this.y+this.height/2+7);
@@ -710,7 +632,7 @@ var shiftbackdirectiondown = 2;
             drawBox(this.x-this.width/2-10, this.y+5, this.width/2, this.height-10, "black");
 
                         bctx.beginPath();
-                        bctx.font = "10pt Arial";//"15pt Arial";
+                        bctx.font = "10pt Arial";
                         bctx.textAlign = "center";
                         bctx.fillStyle = "white";
                         bctx.fillText("Ходит", this.x-this.width/2-10+this.width/4, this.y+5+(this.height-10)/2+5);
@@ -759,66 +681,6 @@ var shiftbackdirectiondown = 2;
         bctx.closePath();
     }
     
-/*
-   addElement(createObjectElement(function () {
-        bctx.fillStyle = "brown"; 
-        bctx.rect(175, 75, 40, 300);
-        bctx.fill();
-    }, null));
-
-
-
-   addElement(createObjectElement(function () {
-        bctx.fillStyle = "brown"; 
-        bctx.rect(250, 175, 25, 200);
-        bctx.fill();
-    }, null));
-
-   addElement(createObjectElement(function () {
-        bctx.fillStyle = "brown"; 
-        bctx.rect(1065, 75, 40, 300);
-        bctx.fill();
-    }, null));
-    
-
-   addElement(createObjectElement(function () {
-        bctx.fillStyle = "brown"; 
-        bctx.rect(1005, 175, 25, 200);
-        bctx.fill();
-    }, null));
-
-   addElement(createObjectElement(function () {
-        bctx.fillStyle = "brown"; 
-        bctx.rect(175, 400, 100, 25);
-        bctx.fill();
-    }, null));
-    
-    
-   addElement(createObjectElement(function () {
-        bctx.fillStyle = "brown"; 
-        bctx.rect(1005, 400, 100, 25);
-        bctx.fill();
-    }, null));
-    
-    
-   addElement(createObjectElement(function () {
-        bctx.fillStyle = "brown"; 
-        bctx.rect(25, 50, 100, 300);
-        bctx.fill();
-    }, null));
-    
-   addElement(createObjectElement(function () {
-        bctx.fillStyle = "brown"; 
-        bctx.rect(1155, 50, 100, 300);
-        bctx.fill();
-    }, null));
-    
-   addElement(createObjectElement(function () {
-        bctx.fillStyle = "brown"; 
-        bctx.rect(relSizeX()/2-75, 25, 150, 50);
-        bctx.fill();
-    }, null));
-    */
  
     function changeCurrentPlayer() {
         if (currentPlayer === player1) {
