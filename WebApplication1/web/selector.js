@@ -13,7 +13,9 @@ function selectorPage() {
         drawBox(this.x, this.y, this.width, this.height, "#101010");
         drawStrokeBox(this.x, this.y, this.width, this.height, "grey");
         var img = resource["fire_mage"].image;
-        bctx.drawImage(img, this.x+(this.width-img.width)/2, this.y+(this.height-img.height)/2);
+        //img.width*=4;
+        //img.height*=4;
+        bctx.drawImage(img, this.x+(this.width-img.width)/2, this.y+(this.height-img.height)/2, img.width*2, img.height*2);
     }, null, 350, 150, 200, 200, 'fireMage')
         .addEvent("mousedown", selectMage));
 
@@ -48,7 +50,7 @@ function selectorPage() {
                 drawBox(el.x, el.y, el.width, el.height, "#"+color);
                 drawStrokeBox(el.x, el.y, el.width, el.height, "grey");
                 var img = resource["fire_mage"].image;
-                bctx.drawImage(img, el.x+(el.width-img.width)/2, el.y+(el.height-img.height)/2);
+                bctx.drawImage(img, el.x+(el.width-img.width)/2, el.y+(el.height-img.height)/2, img.width*2, img.height*2);
                 onScreen();
                 if (forward) {
                     i+=32;
